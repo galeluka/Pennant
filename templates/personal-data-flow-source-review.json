@@ -1,0 +1,411 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_personal_data_flow",
+    "name": "Personal data flow — source review",
+    "domain": "personal data processing",
+    "domainId": "personal-data-processing",
+    "reviewDomain": "source-review",
+    "question": "Does every movement of personal data described here have a stated legal basis and a retention period that does not conflict with another?",
+    "summary": "A record of processing held as a graph so an export can be checked against the retention rules the organisation already holds. Two retention rules are wired with CONTRADICTS because traffic data is also invoice-supporting data, and the two windows cannot both be obeyed for the same rows. The export interface is checked by an analyzer and has no edge from the lawful-basis register: that absence is the finding, and prose would have hidden it. No real controller, processor, dataset name or jurisdiction appears; retention figures are illustrative and must be replaced.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "Legal basis and retention rules",
+        "role": "The rules and the register they derive from, plus who is accountable. No systems belong here."
+      },
+      {
+        "id": "l2",
+        "name": "Definitions and measured volumes",
+        "role": "Terms defined once, and the measured facts a retention ceiling reads. No rules belong here."
+      },
+      {
+        "id": "l3",
+        "name": "Where personal data actually moves",
+        "role": "Interfaces, stores and third parties. No governance belongs here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "ctrl_basis",
+        "layer": "l1",
+        "kind": "control",
+        "label": "Lawful basis register",
+        "props": {},
+        "note": "The register every processing operation is supposed to appear in."
+      },
+      {
+        "id": "rule_traffic",
+        "layer": "l1",
+        "kind": "rule",
+        "label": "Traffic data is deleted after six months",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "rule_invoice",
+        "layer": "l1",
+        "kind": "rule",
+        "label": "Records supporting an invoice are kept for five years",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_dpo",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Data protection officer",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_revenue",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Revenue assurance lead",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_basis",
+        "layer": "l1",
+        "kind": "analyzer",
+        "label": "Data movement with no stated legal basis",
+        "props": {},
+        "note": "An interface that carries personal data and does not appear in the register.",
+        "appliesTo": {
+          "domains": [
+            "source-review",
+            "document-review"
+          ],
+          "targetKinds": [
+            "integration",
+            "datastore",
+            "control"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "data movements"
+        ],
+        "produces": [
+          "movements with no basis"
+        ]
+      },
+      {
+        "id": "a_retention",
+        "layer": "l1",
+        "kind": "analyzer",
+        "label": "Conflicting retention periods",
+        "props": {},
+        "note": "Two rules setting different windows over rows that are in both sets.",
+        "appliesTo": {
+          "domains": [
+            "source-review"
+          ],
+          "targetKinds": [
+            "rule"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "rule statements"
+        ],
+        "produces": [
+          "retention conflicts"
+        ]
+      },
+      {
+        "id": "term_traffic",
+        "layer": "l2",
+        "kind": "term",
+        "label": "Traffic data",
+        "props": {},
+        "note": "The definition that decides whether the six-month rule reaches these rows."
+      },
+      {
+        "id": "term_subscriber",
+        "layer": "l2",
+        "kind": "term",
+        "label": "Subscriber identifier",
+        "props": {},
+        "note": "Pseudonymous is not anonymous. Defined here once."
+      },
+      {
+        "id": "var_held",
+        "layer": "l2",
+        "kind": "variable",
+        "label": "Days of traffic data currently held",
+        "props": {},
+        "note": "Measured from the oldest partition, not from policy."
+      },
+      {
+        "id": "ceil_retain",
+        "layer": "l2",
+        "kind": "ceiling",
+        "label": "Longest retention any dataset may carry",
+        "props": {},
+        "note": "Derived from the measured figure and the strictest applicable rule."
+      },
+      {
+        "id": "int_export",
+        "layer": "l3",
+        "kind": "integration",
+        "label": "Operational store to analytics export",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ds_crm",
+        "layer": "l3",
+        "kind": "datastore",
+        "label": "Operational subscriber store",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ds_warehouse",
+        "layer": "l3",
+        "kind": "datastore",
+        "label": "Analytics warehouse",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "prov_analytics",
+        "layer": "l3",
+        "kind": "provider",
+        "label": "External analytics processor",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "ctrl_basis",
+        "rel": "GOVERNS",
+        "to": "rule_traffic",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ctrl_basis",
+        "rel": "GOVERNS",
+        "to": "rule_invoice",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "rule_traffic",
+        "rel": "CONTRADICTS",
+        "to": "rule_invoice",
+        "note": "Traffic data supporting an invoice is in both sets. Six months and five years cannot both hold."
+      },
+      {
+        "id": "e_0004",
+        "from": "ctrl_basis",
+        "rel": "OWNED_BY",
+        "to": "act_dpo",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "rule_traffic",
+        "rel": "OWNED_BY",
+        "to": "act_dpo",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "rule_invoice",
+        "rel": "OWNED_BY",
+        "to": "act_revenue",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "term_traffic",
+        "rel": "USED_IN",
+        "to": "rule_traffic",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "term_subscriber",
+        "rel": "USED_IN",
+        "to": "int_export",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "ceil_retain",
+        "rel": "DEPENDS_ON",
+        "to": "var_held",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "ceil_retain",
+        "rel": "GOVERNS",
+        "to": "ds_warehouse",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "a_retention",
+        "rel": "CHECKS",
+        "to": "rule_traffic",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "a_retention",
+        "rel": "CHECKS",
+        "to": "rule_invoice",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "a_basis",
+        "rel": "CHECKS",
+        "to": "int_export",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "int_export",
+        "rel": "READS_FROM",
+        "to": "ds_crm",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "int_export",
+        "rel": "WRITES_TO",
+        "to": "ds_warehouse",
+        "note": ""
+      },
+      {
+        "id": "e_0016",
+        "from": "ds_warehouse",
+        "rel": "OWNED_BY",
+        "to": "prov_analytics",
+        "note": ""
+      },
+      {
+        "id": "e_0017",
+        "from": "ds_crm",
+        "rel": "OWNED_BY",
+        "to": "act_dpo",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "Name every movement of personal data with no legal basis on record, and every pair of retention rules that cannot both be obeyed.",
+      "steps": [
+        {
+          "id": "st_read",
+          "name": "Read the record of processing",
+          "kind": "extract",
+          "intent": "Lift each data movement and each retention rule out of the source.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "data movements",
+            "rule statements"
+          ]
+        },
+        {
+          "id": "st_basis",
+          "name": "Legal basis check",
+          "kind": "analyzer",
+          "intent": "Movements absent from the lawful basis register.",
+          "prompt": "",
+          "consumes": [
+            "data movements"
+          ],
+          "produces": [
+            "movements with no basis"
+          ],
+          "srcNode": "a_basis"
+        },
+        {
+          "id": "st_ret",
+          "name": "Retention conflict check",
+          "kind": "analyzer",
+          "intent": "Rules setting different windows over overlapping rows.",
+          "prompt": "",
+          "consumes": [
+            "rule statements"
+          ],
+          "produces": [
+            "retention conflicts"
+          ],
+          "srcNode": "a_retention"
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Is anything held longer than the ceiling the measurements allow?",
+          "prompt": "",
+          "consumes": [
+            "movements with no basis",
+            "retention conflicts"
+          ],
+          "produces": [
+            "processing verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Data protection sign-off",
+          "kind": "human",
+          "intent": "A named person accepts or refuses, holding the verdict.",
+          "prompt": "",
+          "consumes": [
+            "processing verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_read",
+          "to": "st_basis",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_read",
+          "to": "st_ret",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_basis",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0004",
+          "from": "st_ret",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0005",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

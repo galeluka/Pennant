@@ -1,0 +1,185 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_shipping_rfa_tenders",
+    "name": "Shipping Mogul RFA Tender Selection",
+    "domain": "maritime logistics tender evaluation",
+    "domainId": "system",
+    "reviewDomain": "system",
+    "question": "How are complex Request For Approval (RFA) tenders evaluated and selected for large-scale maritime shipping contracts?",
+    "summary": "This model represents how a global shipping enterprise screens provider bids, applies operational safety ceilings, evaluates routing variables, and contracts vessel capacity through secure channels.",
+    "anonymised": false,
+    "layers": [
+      {
+        "id": "l_business",
+        "name": "Commercial and Rules",
+        "role": "Contains channels, rules, and terms. No technical infrastructure details belong here."
+      },
+      {
+        "id": "l_operations",
+        "name": "Fleet Operations",
+        "role": "Contains providers, variables, and ceilings. No contracting rules belong here."
+      },
+      {
+        "id": "l_systems",
+        "name": "Data and Integrations",
+        "role": "Contains datastores, integrations, and apps. No business actors belong here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "ch_tender_portal",
+        "layer": "l_business",
+        "kind": "channel",
+        "label": "Global B2B Tender Portal",
+        "props": {},
+        "note": "Primary digital channel where shipping providers submit RFA bids."
+      },
+      {
+        "id": "rule_vessel_eligibility",
+        "layer": "l_business",
+        "kind": "rule",
+        "label": "Vessel Age and Safety Rule",
+        "props": {},
+        "note": "Mandatory condition filtering out providers with high-risk historical incident profiles."
+      },
+      {
+        "id": "term_demurrage",
+        "layer": "l_business",
+        "kind": "term",
+        "label": "Demurrage Charge Definition",
+        "props": {},
+        "note": "Defined financial penalty framework for cargo loading delays."
+      },
+      {
+        "id": "prov_carrier",
+        "layer": "l_operations",
+        "kind": "provider",
+        "label": "Third-Party Fleet Provider",
+        "props": {},
+        "note": "External shipping contractor participating in the RFA tender."
+      },
+      {
+        "id": "var_fuel_cost",
+        "layer": "l_operations",
+        "kind": "variable",
+        "label": "Current Bunkering Fuel Index",
+        "props": {},
+        "note": "Measured market fact used to calculate total route economics."
+      },
+      {
+        "id": "ceiling_draft",
+        "layer": "l_operations",
+        "kind": "ceiling",
+        "label": "Port Channel Depth Ceiling",
+        "props": {},
+        "note": "Hard physical limit on vessel draught for specific docking facilities."
+      },
+      {
+        "id": "ds_tender_ledger",
+        "layer": "l_systems",
+        "kind": "datastore",
+        "label": "Tender Contract Ledger",
+        "props": {},
+        "note": "Secure repository holding final awarded shipping contracts and terms."
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "ch_tender_portal",
+        "to": "prov_carrier",
+        "rel": "SOLD_VIA",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "rule_vessel_eligibility",
+        "to": "prov_carrier",
+        "rel": "VALIDATES",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "var_fuel_cost",
+        "to": "rule_vessel_eligibility",
+        "rel": "DEPENDS_ON",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ceiling_draft",
+        "to": "rule_vessel_eligibility",
+        "rel": "GOVERNS",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "prov_carrier",
+        "to": "ds_tender_ledger",
+        "rel": "WRITES_TO",
+        "note": ""
+      }
+    ],
+    "createdAt": 1719360000,
+    "logic": {
+      "goal": "Filter and select compliant shipping tender applications against physical ceilings and cost variables.",
+      "steps": [
+        {
+          "id": "st_extract",
+          "name": "Ingest Tender Bids",
+          "kind": "extract",
+          "intent": "Pull electronic bids from the tender portal",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "raw_tenders"
+          ],
+          "srcNode": ""
+        },
+        {
+          "id": "st_analyzer",
+          "name": "Evaluate Rules and Ceilings",
+          "kind": "transform",
+          "intent": "Check provider metrics against safety ceilings and fuel variables",
+          "prompt": "",
+          "consumes": [
+            "raw_tenders"
+          ],
+          "produces": [
+            "compliant_tenders"
+          ],
+          "srcNode": ""
+        },
+        {
+          "id": "st_human",
+          "name": "Executive Award Decision",
+          "kind": "human",
+          "intent": "Maritime director signs off on winning tender contracts",
+          "prompt": "",
+          "consumes": [
+            "compliant_tenders"
+          ],
+          "produces": [],
+          "srcNode": ""
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_extract",
+          "to": "st_analyzer",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_analyzer",
+          "to": "st_human",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

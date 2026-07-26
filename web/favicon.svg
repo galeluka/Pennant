@@ -1,0 +1,13 @@
+<!-- Pennant favicon. Copyright (c) 2026 Luka Gale. MIT licence.
+
+     Simplified for 16px: the node mesh dissolves and a 1.6px mast disappears
+     entirely at that size, so this version thickens the mast to a solid bar and
+     fattens both pennants. Two pennants are kept because one pennant is a
+     different signal (small craft advisory) - the count is the meaning.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="5" fill="#171c1f"/>
+  <rect x="6" y="4" width="3" height="24" rx="1.5" fill="#e6e4dd"/>
+  <path d="M10 6.5h16.5L10 14z" fill="#b4262c"/>
+  <path d="M10 17.5h16.5L10 25z" fill="#b4262c"/>
+</svg>

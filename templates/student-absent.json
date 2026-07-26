@@ -1,0 +1,376 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "generator": {
+    "app": "Pennant",
+    "build": "0.13.0-ce",
+    "note": "Hand-built worked example for a student absence verification checklist."
+  },
+  "model": {
+    "id": "m_student_absence",
+    "name": "Student absence — verification template",
+    "domain": "School administration",
+    "question": "Is the student absence properly justified by valid guardian notice and policy-compliant documentation?",
+    "summary": "A student absence request modeled as a graph rather than read as prose. Note sections make claims; claims impose verification obligations; attendance logs and notes settle claims. An analyzer is pointed at a load-bearing unevidenced claim to test policy validity. Contains no real student or school data: every label is generic.",
+    "anonymised": true,
+    "layers": [
+      {
+        "id": "l1",
+        "name": "The absence notice",
+        "role": "..."
+      },
+      {
+        "id": "l2",
+        "name": "Policy commitments",
+        "role": "..."
+      },
+      {
+        "id": "l3",
+        "name": "Verification evidence",
+        "role": "..."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "doc",
+        "layer": "l1",
+        "kind": "document",
+        "label": "Student Absence Package",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "s_notice",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Guardian Explanation Note",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "s_policy",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Attendance Policy Guidelines",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "s_records",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Prior Attendance History",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_excused",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The absence qualifies as excused under district policy",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_timely",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The absence notice was submitted within the mandatory reporting window",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_pattern",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The absence does not trigger chronic truancy thresholds",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_guardian",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Verified guardian signature and contact confirmation",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_doctor",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Licensed medical professional note for extended absence",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_phone",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Direct guardian callback verification log",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_medcert",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Official medical clinic certificate",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_history",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Term attendance database records",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_unev",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Unevidenced excuse claim",
+        "props": {},
+        "note": "",
+        "appliesTo": {
+          "domains": [
+            "school-administration"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unevidenced claims"
+        ]
+      },
+      {
+        "id": "a_guardian",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Missing guardian confirmation",
+        "props": {},
+        "note": "",
+        "appliesTo": {
+          "domains": [
+            "school-administration"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "obligation list"
+        ],
+        "produces": [
+          "orphan obligations"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0000",
+        "from": "s_notice",
+        "to": "doc",
+        "rel": "PART_OF",
+        "note": ""
+      },
+      {
+        "id": "e_0001",
+        "from": "s_policy",
+        "to": "doc",
+        "rel": "PART_OF",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "s_records",
+        "to": "doc",
+        "rel": "PART_OF",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "s_policy",
+        "to": "c_excused",
+        "rel": "ASSERTS",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "s_notice",
+        "to": "c_timely",
+        "rel": "ASSERTS",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "s_records",
+        "to": "c_pattern",
+        "rel": "ASSERTS",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "c_excused",
+        "to": "o_guardian",
+        "rel": "IMPOSES",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "c_excused",
+        "to": "o_doctor",
+        "rel": "IMPOSES",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "c_timely",
+        "to": "ev_phone",
+        "rel": "EVIDENCED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "c_excused",
+        "to": "ev_medcert",
+        "rel": "EVIDENCED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "c_pattern",
+        "to": "ev_history",
+        "rel": "EVIDENCED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "a_unev",
+        "to": "c_excused",
+        "rel": "CHECKS",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "a_guardian",
+        "to": "c_excused",
+        "rel": "CHECKS",
+        "note": ""
+      }
+    ],
+    "createdAt": 0,
+    "logic": {
+      "goal": "...",
+      "steps": [
+        {
+          "id": "st_ext",
+          "name": "Extract claims and obligations",
+          "kind": "extract",
+          "intent": "",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "claim list",
+            "obligation list"
+          ]
+        },
+        {
+          "id": "st_unev",
+          "name": "Unevidenced claim check",
+          "kind": "analyzer",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "claim list"
+          ],
+          "produces": [
+            "unevidenced claims"
+          ],
+          "srcNode": "a_unev"
+        },
+        {
+          "id": "st_guardian",
+          "name": "Missing guardian check",
+          "kind": "analyzer",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "obligation list"
+          ],
+          "produces": [
+            "orphan obligations"
+          ],
+          "srcNode": "a_guardian"
+        },
+        {
+          "id": "st_prop",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "unevidenced claims",
+            "orphan obligations"
+          ],
+          "produces": [
+            "absence verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Recommendation",
+          "kind": "human",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "absence verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0",
+          "from": "st_ext",
+          "to": "st_unev",
+          "rel": "needs"
+        },
+        {
+          "id": "le_1",
+          "from": "st_ext",
+          "to": "st_guardian",
+          "rel": "needs"
+        },
+        {
+          "id": "le_2",
+          "from": "st_unev",
+          "to": "st_prop",
+          "rel": "needs"
+        },
+        {
+          "id": "le_3",
+          "from": "st_guardian",
+          "to": "st_prop",
+          "rel": "needs"
+        },
+        {
+          "id": "le_4",
+          "from": "st_prop",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    },
+    "schemaVersion": 2,
+    "domainId": "school-administration"
+  }
+}

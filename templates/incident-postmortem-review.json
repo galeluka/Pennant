@@ -1,0 +1,498 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_incident_postmortem",
+    "name": "Incident postmortem — review template",
+    "domain": "incident postmortem review",
+    "domainId": "incident-postmortem-review",
+    "reviewDomain": "document-review",
+    "question": "Does this postmortem commit anybody to anything, and would any of its claims survive being asked for the number?",
+    "summary": "A postmortem modelled as a document graph: four chapters, three claims, two obligations and the evidence that would settle them. It carries the finding postmortems reliably produce — the claim that the failure cannot recur has no evidence behind it, and the obligation to review the change process names nobody. One chapter is left with no analyzer pointed at it, so the gap audit reports that customer impact passes by default. Nothing here describes a real outage, customer, system or window; the incident node is a placeholder for yours.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "The postmortem as written",
+        "role": "The document, its chapters, the incident it is about and the process that caused it. No claims belong here."
+      },
+      {
+        "id": "l2",
+        "name": "What it claims and commits to",
+        "role": "Assertions that could be false, obligations they create, and the analyzers responsible for checking them. No evidence belongs here."
+      },
+      {
+        "id": "l3",
+        "name": "What would settle it",
+        "role": "Numbers and systems of record. No opinions and no narrative belong here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "doc",
+        "layer": "l1",
+        "kind": "document",
+        "label": "Production incident postmortem",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_timeline",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Timeline",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_cause",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Root cause",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_actions",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Corrective actions",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_impact",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Customer impact",
+        "props": {},
+        "note": "No analyzer is pointed at this chapter, so it passes by default. Deliberate."
+      },
+      {
+        "id": "inc",
+        "layer": "l1",
+        "kind": "incident",
+        "label": "Payment path outage",
+        "props": {},
+        "note": "Placeholder. Replace with your own incident, window and blast radius."
+      },
+      {
+        "id": "proc_change",
+        "layer": "l1",
+        "kind": "process",
+        "label": "Unreviewed configuration change",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_reliability",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Reliability engineering lead",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_cause",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "A single configuration change caused the outage",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_contained",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "No customer records were lost",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_norepeat",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The same failure cannot recur",
+        "props": {},
+        "note": "Deliberately unevidenced. This is the claim the template exists to teach."
+      },
+      {
+        "id": "o_alert",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Add an alert on replication lag",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_review",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Review the change approval process",
+        "props": {},
+        "note": "No owner and no date. An obligation without both is a sentence, not an obligation."
+      },
+      {
+        "id": "a_unev",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Unevidenced claim",
+        "props": {},
+        "note": "A claim with nothing behind it that would settle it.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unevidenced claims"
+        ]
+      },
+      {
+        "id": "a_owner",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Obligation with no named owner",
+        "props": {},
+        "note": "An action item that will not happen because nobody owns it.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "obligation"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "obligation list"
+        ],
+        "produces": [
+          "unowned obligations"
+        ]
+      },
+      {
+        "id": "a_placeholder",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Chapter promised and never written",
+        "props": {},
+        "note": "Content the document commits to and does not contain.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "document",
+            "chapter"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "chapter list"
+        ],
+        "produces": [
+          "missing content"
+        ]
+      },
+      {
+        "id": "ev_logs",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Gateway error logs for the window",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_recon",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Row count reconciliation report",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_change",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Change record for the configuration edit",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "ch_timeline",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ch_cause",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "ch_actions",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ch_impact",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "inc",
+        "rel": "CAUSED_BY",
+        "to": "proc_change",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "proc_change",
+        "rel": "OWNED_BY",
+        "to": "act_reliability",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "ch_cause",
+        "rel": "ASSERTS",
+        "to": "c_cause",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "ch_impact",
+        "rel": "ASSERTS",
+        "to": "c_contained",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "ch_actions",
+        "rel": "ASSERTS",
+        "to": "c_norepeat",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "c_cause",
+        "rel": "IMPOSES",
+        "to": "o_alert",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "c_norepeat",
+        "rel": "IMPOSES",
+        "to": "o_review",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "c_cause",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_change",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "c_cause",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_logs",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "c_contained",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_recon",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "a_unev",
+        "rel": "CHECKS",
+        "to": "c_norepeat",
+        "note": ""
+      },
+      {
+        "id": "e_0016",
+        "from": "a_owner",
+        "rel": "CHECKS",
+        "to": "o_review",
+        "note": ""
+      },
+      {
+        "id": "e_0017",
+        "from": "a_placeholder",
+        "rel": "CHECKS",
+        "to": "ch_timeline",
+        "note": ""
+      },
+      {
+        "id": "e_0018",
+        "from": "a_placeholder",
+        "rel": "CHECKS",
+        "to": "ch_cause",
+        "note": ""
+      },
+      {
+        "id": "e_0019",
+        "from": "a_placeholder",
+        "rel": "CHECKS",
+        "to": "ch_actions",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "Decide whether this postmortem can be signed off, and name what is missing if it cannot.",
+      "steps": [
+        {
+          "id": "st_ext",
+          "name": "Extract chapters, claims and obligations",
+          "kind": "extract",
+          "intent": "Lift the structure out of the document before checking anything.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "chapter list",
+            "claim list",
+            "obligation list"
+          ]
+        },
+        {
+          "id": "st_ph",
+          "name": "Missing content check",
+          "kind": "analyzer",
+          "intent": "Chapters the document promised and never wrote.",
+          "prompt": "",
+          "consumes": [
+            "chapter list"
+          ],
+          "produces": [
+            "missing content"
+          ],
+          "srcNode": "a_placeholder"
+        },
+        {
+          "id": "st_unev",
+          "name": "Unevidenced claim check",
+          "kind": "analyzer",
+          "intent": "Claims with nothing behind them.",
+          "prompt": "",
+          "consumes": [
+            "claim list"
+          ],
+          "produces": [
+            "unevidenced claims"
+          ],
+          "srcNode": "a_unev"
+        },
+        {
+          "id": "st_own",
+          "name": "Unowned obligation check",
+          "kind": "analyzer",
+          "intent": "Action items nobody owns.",
+          "prompt": "",
+          "consumes": [
+            "obligation list"
+          ],
+          "produces": [
+            "unowned obligations"
+          ],
+          "srcNode": "a_owner"
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Can the corrective actions actually be absorbed by the people named?",
+          "prompt": "",
+          "consumes": [
+            "missing content",
+            "unevidenced claims",
+            "unowned obligations"
+          ],
+          "produces": [
+            "sign-off verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Sign-off",
+          "kind": "human",
+          "intent": "A named person closes the incident or sends it back.",
+          "prompt": "",
+          "consumes": [
+            "sign-off verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_ext",
+          "to": "st_ph",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_ext",
+          "to": "st_unev",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_ext",
+          "to": "st_own",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0004",
+          "from": "st_ph",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0005",
+          "from": "st_unev",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0006",
+          "from": "st_own",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0007",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

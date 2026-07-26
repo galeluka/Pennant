@@ -1,0 +1,185 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_ba_rfa_flow",
+    "name": "BA RFA Flow and Checklist",
+    "domain": "business architecture rfa process",
+    "domainId": "system",
+    "reviewDomain": "system",
+    "question": "What is the end-to-end workflow and validation checklist for executing a Request For Approval under Business Architecture?",
+    "summary": "This model captures the lifecycle of a Business Architecture RFA, detailing actors, review rules, operational controls, and datastores. It establishes the criteria for approval routing and validation gates.",
+    "anonymised": false,
+    "layers": [
+      {
+        "id": "l_governance",
+        "name": "Governance and Controls",
+        "role": "Contains rules, controls, and actors. No apps or technical datastores belong here."
+      },
+      {
+        "id": "l_workflow",
+        "name": "Process and Flow",
+        "role": "Contains processes, channels, and events. No abstract rules belong here."
+      },
+      {
+        "id": "l_infrastructure",
+        "name": "Infrastructure and Data",
+        "role": "Contains apps, integrations, and datastores. No human governance roles belong here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "act_ba_lead",
+        "layer": "l_governance",
+        "kind": "actor",
+        "label": "Business Architecture Lead",
+        "props": {},
+        "note": "Owns the initial RFA structure and structural validation."
+      },
+      {
+        "id": "ctrl_compliance",
+        "layer": "l_governance",
+        "kind": "control",
+        "label": "Corporate Governance Standard",
+        "props": {},
+        "note": "Mandatory compliance check required for budget allocation."
+      },
+      {
+        "id": "rule_threshold",
+        "layer": "l_governance",
+        "kind": "rule",
+        "label": "RFA Approval Threshold",
+        "props": {},
+        "note": "Decides whether executive sign-off is required based on total cost."
+      },
+      {
+        "id": "proc_submission",
+        "layer": "l_workflow",
+        "kind": "process",
+        "label": "RFA Submission Process",
+        "props": {},
+        "note": "The standardized sequence of gathering requirements and drafting the business case."
+      },
+      {
+        "id": "ev_rfa_filed",
+        "layer": "l_workflow",
+        "kind": "event",
+        "label": "RFA Packet Filed",
+        "props": {},
+        "note": "Trigger event indicating submission completion."
+      },
+      {
+        "id": "app_workflow_eng",
+        "layer": "l_infrastructure",
+        "kind": "app",
+        "label": "Workflow Management App",
+        "props": {},
+        "note": "System of record routing approval requests to designated actors."
+      },
+      {
+        "id": "ds_rfa_archive",
+        "layer": "l_infrastructure",
+        "kind": "datastore",
+        "label": "RFA Database Archive",
+        "props": {},
+        "note": "Historical record store of past approvals and rejected drafts."
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "act_ba_lead",
+        "to": "proc_submission",
+        "rel": "OWNED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ctrl_compliance",
+        "to": "rule_threshold",
+        "rel": "GOVERNS",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "proc_submission",
+        "to": "ev_rfa_filed",
+        "rel": "FLOWS_TO",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ev_rfa_filed",
+        "to": "app_workflow_eng",
+        "rel": "TRIGGERS",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "app_workflow_eng",
+        "to": "ds_rfa_archive",
+        "rel": "WRITES_TO",
+        "note": ""
+      }
+    ],
+    "createdAt": 1719360000,
+    "logic": {
+      "goal": "Determine whether an RFA packet satisfies all structural compliance checks before routing to executives.",
+      "steps": [
+        {
+          "id": "st_extract",
+          "name": "Extract RFA Inputs",
+          "kind": "extract",
+          "intent": "Gather submission artifacts",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "parsed_rfa"
+          ],
+          "srcNode": ""
+        },
+        {
+          "id": "st_analyzer",
+          "name": "Check Threshold Rules",
+          "kind": "transform",
+          "intent": "Verify if cost exceeds rule threshold",
+          "prompt": "",
+          "consumes": [
+            "parsed_rfa"
+          ],
+          "produces": [
+            "threshold_status"
+          ],
+          "srcNode": ""
+        },
+        {
+          "id": "st_human",
+          "name": "Final RFA Sign-off",
+          "kind": "human",
+          "intent": "Actor approves or rejects the request",
+          "prompt": "",
+          "consumes": [
+            "threshold_status"
+          ],
+          "produces": [],
+          "srcNode": ""
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_extract",
+          "to": "st_analyzer",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_analyzer",
+          "to": "st_human",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

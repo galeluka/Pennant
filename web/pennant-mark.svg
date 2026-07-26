@@ -1,0 +1,21 @@
+<!-- Pennant header mark. Copyright (c) 2026 Luka Gale. MIT licence.
+
+     Two red pennants on a mast: the gale warning signal.
+
+     For the studio chrome, inline this and use it at 20-24px. The mast inherits
+     currentColor so it works on a light or dark header without a second asset;
+     the pennants keep the signal red, which is the only place that colour is
+     allowed to appear outside finding severity.
+
+     Static on purpose. The animated node version belongs on the landing page
+     only - a moving mark beside a graph canvas competes with the content.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+     fill="none" role="img" aria-label="Pennant">
+  <!-- mast -->
+  <path d="M4 2.5v19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- upper pennant -->
+  <path d="M4.8 4h13.6L4.8 8.9z" fill="#b4262c"/>
+  <!-- lower pennant -->
+  <path d="M4.8 12.1h13.6L4.8 17z" fill="#b4262c"/>
+</svg>

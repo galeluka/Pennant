@@ -1,0 +1,192 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_idea_implementation",
+    "name": "Corporate Idea Implementation Framework",
+    "domain": "internal innovation execution lifecycle",
+    "domainId": "system",
+    "reviewDomain": "system",
+    "question": "How does an organization systematically vet, fund, and transform employee or partner ideas into deployed capabilities?",
+    "summary": "This model maps the enterprise pipeline for managing corporate innovations, connecting evaluation variables, strategic capabilities, operational apps, and historical incident checks.",
+    "anonymised": false,
+    "layers": [
+      {
+        "id": "l_strategy",
+        "name": "Strategy and Metrics",
+        "role": "Contains variables and capabilities. No raw application workflows belong here."
+      },
+      {
+        "id": "l_operations",
+        "name": "Operations and Execution",
+        "role": "Contains processes, actors, and controls. No raw metrics belong here."
+      },
+      {
+        "id": "l_systems",
+        "name": "Systems and Incidents",
+        "role": "Contains apps, integrations, and incidents. No human decision logic belongs here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "var_roi_target",
+        "layer": "l_strategy",
+        "kind": "variable",
+        "label": "Minimum Projected ROI",
+        "props": {},
+        "note": "Measured financial lookup value required for pilot greenlighting."
+      },
+      {
+        "id": "cap_innovation",
+        "layer": "l_strategy",
+        "kind": "capability",
+        "label": "Rapid Prototyping Capability",
+        "props": {},
+        "note": "Organizational competence in testing new business concepts."
+      },
+      {
+        "id": "act_innovation_board",
+        "layer": "l_operations",
+        "kind": "actor",
+        "label": "Innovation Steering Committee",
+        "props": {},
+        "note": "Cross-functional team responsible for funding authorization."
+      },
+      {
+        "id": "proc_evaluation",
+        "layer": "l_operations",
+        "kind": "process",
+        "label": "Idea Evaluation Pipeline",
+        "props": {},
+        "note": "Step-by-step scoring framework applied to incoming proposals."
+      },
+      {
+        "id": "ctrl_budget_cap",
+        "layer": "l_operations",
+        "kind": "control",
+        "label": "Quarterly R&D Budget Ceiling",
+        "props": {},
+        "note": "Hard limit on total capital expendable across active pilot projects."
+      },
+      {
+        "id": "app_ideation_portal",
+        "layer": "l_systems",
+        "kind": "app",
+        "label": "Enterprise Ideation Portal",
+        "props": {},
+        "note": "Internal software used to submit and vote on new concepts."
+      },
+      {
+        "id": "inc_failed_pilot",
+        "layer": "l_systems",
+        "kind": "incident",
+        "label": "Past Scaling Bottleneck Incident",
+        "props": {},
+        "note": "Recorded historical failure due to missing integration capacity."
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "var_roi_target",
+        "to": "proc_evaluation",
+        "rel": "USED_IN",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "cap_innovation",
+        "to": "proc_evaluation",
+        "rel": "IMPLEMENTS",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "act_innovation_board",
+        "to": "proc_evaluation",
+        "rel": "OWNED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ctrl_budget_cap",
+        "to": "proc_evaluation",
+        "rel": "GOVERNS",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "app_ideation_portal",
+        "to": "proc_evaluation",
+        "rel": "TRIGGERS",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "inc_failed_pilot",
+        "to": "proc_evaluation",
+        "rel": "CAUSED_BY",
+        "note": ""
+      }
+    ],
+    "createdAt": 1719360000,
+    "logic": {
+      "goal": "Evaluate whether submitted corporate ideas meet financial and operational criteria for pilot funding.",
+      "steps": [
+        {
+          "id": "st_extract",
+          "name": "Extract Idea Data",
+          "kind": "extract",
+          "intent": "Pull submission details from portal",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "idea_dataset"
+          ],
+          "srcNode": ""
+        },
+        {
+          "id": "st_analyzer",
+          "name": "Run ROI Check",
+          "kind": "transform",
+          "intent": "Verify idea metrics against target variables",
+          "prompt": "",
+          "consumes": [
+            "idea_dataset"
+          ],
+          "produces": [
+            "scored_ideas"
+          ],
+          "srcNode": ""
+        },
+        {
+          "id": "st_human",
+          "name": "Committee Review",
+          "kind": "human",
+          "intent": "Final committee voting and resource allocation",
+          "prompt": "",
+          "consumes": [
+            "scored_ideas"
+          ],
+          "produces": [],
+          "srcNode": ""
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_extract",
+          "to": "st_analyzer",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_analyzer",
+          "to": "st_human",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

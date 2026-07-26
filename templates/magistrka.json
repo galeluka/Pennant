@@ -1,0 +1,336 @@
+{
+"kind": "doccritique.knowledge-model",
+"schemaVersion": "1.1",
+"model": {
+"schemaVersion": 2,
+"id": "m_ef_ul_navodila",
+"name": "EF UL Navodila za pisna dela",
+"domain": "priprava strokovnih besedil",
+"domainId": "document-review",
+"reviewDomain": "document-review",
+"question": "Ali dokument po strukturi, citiranju in tehničnih merah ustreza navodilom Ekonomske fakultete UL?",
+"summary": "Model strukturira navodila za izdelavo pisnih del na EF UL. Obravnava obvezno strukturo dokumenta, zahteve za citiranje po sistemu APA, etično uporabo generativne umetne inteligence ter natančne tipografske proporce in robove, ki določajo obseg in obliko dela.",
+"anonymised": false,
+"layers": [
+{
+"id": "l1",
+"name": "Dokument in poglavja",
+"role": "Fizična struktura dokumenta in njegova poglavja. Nobenih trditev ali tehničnih mer."
+},
+{
+"id": "l2",
+"name": "Trditve in obveznosti",
+"role": "Kaj dokument zatrjuje glede vsebine in virov ter obveznosti, ki jih to prinese. Brez dokazov in številk."
+},
+{
+"id": "l3",
+"name": "Dokazila",
+"role": "Konkretni seznami in zapisi, ki potrdijo trditve. Brez narative."
+},
+{
+"id": "l4",
+"name": "Proporci in mere",
+"role": "Izmerljive spremenljivke glede obsega in tipografije ter stroge omejitve, ki jih morajo upoštevati."
+}
+],
+"nodes": [
+{
+"id": "doc_thesis",
+"layer": "l1",
+"kind": "document",
+"label": "Pisno delo",
+"props": {},
+"note": "Seminarska naloga, magistrsko delo ali doktorska disertacija."
+},
+{
+"id": "ch_front",
+"layer": "l1",
+"kind": "chapter",
+"label": "Uvodni del in kazala",
+"props": {},
+"note": "Povzetek, ključne besede in kazala, številčeno z rimskimi številkami."
+},
+{
+"id": "ch_main",
+"layer": "l1",
+"kind": "chapter",
+"label": "Osrednji del",
+"props": {},
+"note": "Uvod, vsebinska poglavja, sklep in seznam literature. Stranizacija z arabskimi številkami."
+},
+{
+"id": "ch_appendix",
+"layer": "l1",
+"kind": "chapter",
+"label": "Priloge",
+"props": {},
+"note": "Ločeno z vmesnim listom, ni hierarhično urejeno."
+},
+{
+"id": "c_apa_style",
+"layer": "l2",
+"kind": "claim",
+"label": "Dosledno citiranje po APA",
+"props": {},
+"note": "Vsi uporabljeni viri in literatura so navedeni po standardu APA Style."
+},
+{
+"id": "c_ai_disclosure",
+"layer": "l2",
+"kind": "claim",
+"label": "Razkrita uporaba orodij GUI",
+"props": {},
+"note": "Uporaba generativne umetne inteligence je natančno pojasnjena."
+},
+{
+"id": "o_declare_ai",
+"layer": "l2",
+"kind": "obligation",
+"label": "Pojasnilo namena uporabe GUI",
+"props": {
+"owner": "avtor",
+"due": "unstated"
+},
+"note": "Avtor mora v metodologiji ali uvodu navesti namen uporabe GUI in poglavja, kjer je bilo orodje uporabljeno."
+},
+{
+"id": "a_apa_checker",
+"layer": "l2",
+"kind": "analyzer",
+"label": "Preverjevalnik referenc",
+"props": {
+"appliesTo": {
+"domains": ["document-review"],
+"targetKinds": ["claim"],
+"requires": []
+}
+},
+"note": "Preverja ustreznost navajanja po APA in enolično opredelitev vsakega vira."
+},
+{
+"id": "ev_bibliography",
+"layer": "l3",
+"kind": "evidence",
+"label": "Seznam literature in virov",
+"props": {},
+"note": "Abecedno urejen seznam vseh sklicev na koncu osrednjega dela."
+},
+{
+"id": "ev_methodology",
+"layer": "l3",
+"kind": "evidence",
+"label": "Poglavje o metodološkem pristopu",
+"props": {},
+"note": "Pisni dokaz znotraj dokumenta, ki razkriva uporabo UI orodij."
+},
+{
+"id": "var_page_count",
+"layer": "l4",
+"kind": "variable",
+"label": "Izmerjen obseg dela",
+"props": {
+"key": "main_part_pages",
+"unit": "strani",
+"measured": "yes"
+},
+"note": "Število strani osrednjega dela (od uvoda do konca seznama literature)."
+},
+{
+"id": "var_font_size",
+"layer": "l4",
+"kind": "variable",
+"label": "Velikost osnovne pisave",
+"props": {
+"key": "font_size_pt",
+"unit": "pt",
+"measured": "yes"
+},
+"note": "Velikost znakov v osnovnem besedilu."
+},
+{
+"id": "ceil_font_size",
+"layer": "l4",
+"kind": "ceiling",
+"label": "Zahtevana velikost pisave",
+"props": {
+"key": "required_font_size",
+"value": 12,
+"unit": "pt"
+},
+"note": "Besedilo mora biti v velikosti 12 pt z razmakom 1,2."
+},
+{
+"id": "var_margin_inner",
+"layer": "l4",
+"kind": "variable",
+"label": "Notranji rob",
+"props": {
+"key": "inner_margin_cm",
+"unit": "cm",
+"measured": "yes"
+},
+"note": "Širina notranjega roba dokumenta."
+},
+{
+"id": "ceil_margin_inner",
+"layer": "l4",
+"kind": "ceiling",
+"label": "Omejitev notranjega roba",
+"props": {
+"key": "req_inner_margin_cm",
+"value": 3,
+"unit": "cm"
+},
+"note": "Notranji rob mora znašati 3 cm (vključno z 0,5 cm za vezavo)."
+}
+],
+"edges": [
+{
+"id": "e_0001",
+"from": "ch_front",
+"to": "doc_thesis",
+"rel": "PART_OF",
+"note": ""
+},
+{
+"id": "e_0002",
+"from": "ch_main",
+"to": "doc_thesis",
+"rel": "PART_OF",
+"note": ""
+},
+{
+"id": "e_0003",
+"from": "ch_appendix",
+"to": "doc_thesis",
+"rel": "PART_OF",
+"note": ""
+},
+{
+"id": "e_0004",
+"from": "doc_thesis",
+"to": "c_apa_style",
+"rel": "ASSERTS",
+"note": ""
+},
+{
+"id": "e_0005",
+"from": "doc_thesis",
+"to": "c_ai_disclosure",
+"rel": "ASSERTS",
+"note": ""
+},
+{
+"id": "e_0006",
+"from": "c_ai_disclosure",
+"to": "o_declare_ai",
+"rel": "IMPOSES",
+"note": ""
+},
+{
+"id": "e_0007",
+"from": "c_apa_style",
+"to": "ev_bibliography",
+"rel": "EVIDENCED_BY",
+"note": ""
+},
+{
+"id": "e_0008",
+"from": "c_ai_disclosure",
+"to": "ev_methodology",
+"rel": "EVIDENCED_BY",
+"note": ""
+},
+{
+"id": "e_0009",
+"from": "a_apa_checker",
+"to": "c_apa_style",
+"rel": "CHECKS",
+"note": ""
+},
+{
+"id": "e_0010",
+"from": "ceil_font_size",
+"to": "var_font_size",
+"rel": "DEPENDS_ON",
+"note": ""
+},
+{
+"id": "e_0011",
+"from": "ceil_margin_inner",
+"to": "var_margin_inner",
+"rel": "DEPENDS_ON",
+"note": ""
+}
+],
+"createdAt": 0,
+"logic": {
+"goal": "Odločiti, ali dokument po obsegu, navajanju in navedbi pomoči UI ustreza vsem formalnim pravilom UL EF.",
+"steps": [
+{
+"id": "st_extract",
+"name": "Branje besedila",
+"kind": "extract",
+"intent": "Zajem strukture in trditev iz besedila",
+"prompt": "Identificiraj strukturo naloge in obliko citatov.",
+"consumes": ["source_doc"],
+"produces": ["doc_structure", "citation_claims"]
+},
+{
+"id": "st_proportions",
+"name": "Merjenje proporcev",
+"kind": "proportions",
+"intent": "Preveri obseg osrednjega dela in nastavitve roba",
+"prompt": "Izmeri robove in potrdi velikost pisave (12 pt).",
+"consumes": ["doc_structure"],
+"produces": ["measurements"]
+},
+{
+"id": "st_analyzer",
+"name": "Preverjanje referenc",
+"kind": "analyzer",
+"intent": "Primerjava z APA standardom",
+"prompt": "Preveri sezname in citate po pravilih APA.",
+"consumes": ["citation_claims"],
+"produces": ["apa_findings"],
+"srcNode": "a_apa_checker"
+},
+{
+"id": "st_human",
+"name": "Pregled in odločitev",
+"kind": "human",
+"intent": "Končna potrditev ustreznosti za oddajo",
+"prompt": "Glede na ugotovitve odobri oddajo naloge v tisk ali vrni v popravek.",
+"consumes": ["measurements", "apa_findings"],
+"produces": ["final_approval"]
+}
+],
+"edges": [
+{
+"id": "le_0001",
+"from": "st_extract",
+"to": "st_proportions",
+"rel": "needs"
+},
+{
+"id": "le_0002",
+"from": "st_extract",
+"to": "st_analyzer",
+"rel": "needs"
+},
+{
+"id": "le_0003",
+"from": "st_proportions",
+"to": "st_human",
+"rel": "needs"
+},
+{
+"id": "le_0004",
+"from": "st_analyzer",
+"to": "st_human",
+"rel": "needs"
+}
+]
+}
+}
+}

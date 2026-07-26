@@ -1,0 +1,123 @@
+# Optional cluster deployment. See deploy/README.md first — in particular the
+# reason replicas must stay at 1.
+#
+# Renamed from ke-studio to pennant. The KE_* environment variables are
+# deliberately unchanged: the binary still reads those names, and a manifest that
+# invents variables the program does not read is a manifest that silently does
+# nothing. Add PENNANT_* as aliases in the Go flag/env parsing first, keep both
+# for one release, then change them here.
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pennant-data
+  labels:
+    app.kubernetes.io/name: pennant
+spec:
+  accessModes: [ReadWriteOnce]     # RWO on purpose: one writer, one pod
+  resources:
+    requests:
+      storage: 2Gi
+  # storageClassName: <set me>     # the default class is rarely the one you want
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pennant
+  labels:
+    app.kubernetes.io/name: pennant
+    app.kubernetes.io/component: studio
+spec:
+  replicas: 1                      # DO NOT RAISE. See deploy/README.md.
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate                 # never two pods on one RWO volume, even briefly
+  selector:
+    matchLabels: { app: pennant }
+  template:
+    metadata:
+      labels: { app: pennant }
+    spec:
+      # The application never calls the Kubernetes API. Not mounting the token
+      # removes it from the container filesystem entirely.
+      automountServiceAccountToken: false
+      containers:
+        - name: pennant
+          image: pennant:0.14.0
+          ports: [{ containerPort: 8080 }]
+          env:
+            - name: KE_ADDR
+              value: "0.0.0.0:8080"
+            - name: KE_DATA
+              value: "/data"
+
+            # --- authentication -------------------------------------------
+            # Not implemented in this build yet. Listed here so the manifest
+            # matches the intended shape, and so the day it lands nobody has to
+            # remember which variable it was.
+            # - name: KE_AUTH
+            #   value: "local"           # none | local | oidc
+            # - name: KE_ALLOW_SIGNUP
+            #   value: "false"           # first-run bootstrap is always allowed
+            # - name: KE_SESSION_KEY
+            #   valueFrom:
+            #     secretKeyRef: { name: pennant-session, key: key }
+
+            # --- AI assistance --------------------------------------------
+            # Any OpenAI-compatible endpoint: LiteLLM, Ollama, vLLM, OpenRouter.
+            # The key never reaches the browser; omit all three and the studio
+            # still works, with AI assistance switched off.
+            # - name: KE_LLM_BASE_URL
+            #   value: "http://litellm.litellm.svc.cluster.local:4000"
+            # - name: KE_LLM_MODEL
+            #   value: "default"         # a model_name alias from LiteLLM's config
+            # - name: KE_LLM_KEY
+            #   valueFrom:
+            #     secretKeyRef: { name: pennant-llm, key: apiKey }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+          readinessProbe:
+            httpGet: { path: /api/info, port: 8080 }
+            initialDelaySeconds: 3
+          livenessProbe:
+            httpGet: { path: /api/info, port: 8080 }
+            initialDelaySeconds: 10
+          resources:
+            requests: { cpu: 50m,  memory: 64Mi }
+            limits:   { cpu: 500m, memory: 256Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true    # everything writable lives on /data
+            capabilities: { drop: [ALL] }
+            seccompProfile: { type: RuntimeDefault }
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: pennant-data }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pennant
+  labels:
+    app.kubernetes.io/name: pennant
+spec:
+  selector: { app: pennant }
+  ports: [{ name: http, port: 80, targetPort: 8080 }]
+---
+# OpenShift Route. On plain Kubernetes delete this and use an Ingress instead.
+# Nothing in the application depends on either.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: pennant
+  labels:
+    app.kubernetes.io/name: pennant
+  annotations:
+    # Authentication is off unless KE_AUTH is set. Read deploy/README.md before
+    # exposing this outside a trusted network.
+    kubernetes.io/description: "Authentication off by default. Set KE_AUTH=local, or front with oauth-proxy."
+spec:
+  to: { kind: Service, name: pennant }
+  port: { targetPort: 8080 }
+  tls: { termination: edge, insecureEdgeTerminationPolicy: Redirect }

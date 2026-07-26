@@ -1,0 +1,36 @@
+# Local run with a bind mount, which is the point: the workspace is plain JSON on
+# your own disk, readable and diffable while the app is running.
+#
+#   docker compose up --build
+#   open http://127.0.0.1:8080
+#
+services:
+  pennant:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: pennant:0.14.0
+    # 127.0.0.1 on the host side deliberately. There is no authentication in this
+    # build, so binding all interfaces would publish every workspace to your LAN.
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./data:/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      KE_ADDR: "0.0.0.0:8080"      # inside the container; the port mapping confines it
+      KE_DATA: "/data"
+      KE_KEEP_VERSIONS: "50"
+      # AI assistance is optional and off until configured in the UI. If you turn
+      # it on, pin the endpoint here - the server refuses to send a key anywhere
+      # it was not told to.
+      KE_LLM_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/openai/"   # Use LiteLLM 
+      KE_LLM_MODEL: "gemini-3.5-flash" 
+      KE_LLM_KEY: "your-gemini-token" # Use liteLLM master key
+    restart: unless-stopped
+    healthcheck:
+      # No shell and no curl in a scratch image, so the binary cannot test itself.
+      # Docker treats a missing test as none; check from outside instead:
+      #   curl -fsS http://127.0.0.1:8080/api/info
+      disable: true

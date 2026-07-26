@@ -1,0 +1,376 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "generator": {
+    "app": "Pennant",
+    "build": "0.13.0-ce",
+    "note": "Hand-built worked example for an insurance claim review."
+  },
+  "model": {
+    "id": "m_insurance_claim",
+    "name": "Insurance claim — verification template",
+    "domain": "Insurance claims",
+    "question": "Is this claim supported by consistent policy details and verifiable evidence, and what needs validation?",
+    "summary": "An insurance claim modeled as a graph rather than read as prose. Policy sections make claims; claims impose obligations for verification; evidence settles claims. An analyzer is pointed at a load-bearing unevidenced claim to test policy validity. Contains no real personal or carrier data: every label is generic.",
+    "anonymised": true,
+    "layers": [
+      {
+        "id": "l1",
+        "name": "The submission",
+        "role": "..."
+      },
+      {
+        "id": "l2",
+        "name": "Policy commitments",
+        "role": "..."
+      },
+      {
+        "id": "l3",
+        "name": "Supporting evidence",
+        "role": "..."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "doc",
+        "layer": "l1",
+        "kind": "document",
+        "label": "Insurance Claim Package",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "s_loss",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Notice of Loss",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "s_policy",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Policy Coverage Terms",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "s_estimate",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Repair Estimate",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_covered",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The loss event is fully covered under current policy terms",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_amount",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The claimed repair cost matches actual damages",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_timely",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "Notice of loss was filed within reporting windows",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_adjuster",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Independent adjuster inspection sign-off",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_receipts",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Itemized proof of prior ownership or value",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_photos",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Post-loss damage photographs",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_logs",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Official incident report logs",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_invoices",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Original purchase receipts and invoices",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_unev",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Unevidenced coverage claim",
+        "props": {},
+        "note": "",
+        "appliesTo": {
+          "domains": [
+            "insurance-claims"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unevidenced claims"
+        ]
+      },
+      {
+        "id": "a_adjuster",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Missing adjuster verification",
+        "props": {},
+        "note": "",
+        "appliesTo": {
+          "domains": [
+            "insurance-claims"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "obligation list"
+        ],
+        "produces": [
+          "orphan obligations"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0000",
+        "from": "s_loss",
+        "to": "doc",
+        "rel": "PART_OF",
+        "note": ""
+      },
+      {
+        "id": "e_0001",
+        "from": "s_policy",
+        "to": "doc",
+        "rel": "PART_OF",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "s_estimate",
+        "to": "doc",
+        "rel": "PART_OF",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "s_policy",
+        "to": "c_covered",
+        "rel": "ASSERTS",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "s_estimate",
+        "to": "c_amount",
+        "rel": "ASSERTS",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "s_loss",
+        "to": "c_timely",
+        "rel": "ASSERTS",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "c_amount",
+        "to": "o_adjuster",
+        "rel": "IMPOSES",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "c_covered",
+        "to": "o_receipts",
+        "rel": "IMPOSES",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "c_amount",
+        "to": "ev_photos",
+        "rel": "EVIDENCED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "c_timely",
+        "to": "ev_logs",
+        "rel": "EVIDENCED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "c_covered",
+        "to": "ev_invoices",
+        "rel": "EVIDENCED_BY",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "a_unev",
+        "to": "c_covered",
+        "rel": "CHECKS",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "a_adjuster",
+        "to": "c_amount",
+        "rel": "CHECKS",
+        "note": ""
+      }
+    ],
+    "createdAt": 0,
+    "logic": {
+      "goal": "...",
+      "steps": [
+        {
+          "id": "st_ext",
+          "name": "Extract claims and obligations",
+          "kind": "extract",
+          "intent": "",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "claim list",
+            "obligation list"
+          ]
+        },
+        {
+          "id": "st_unev",
+          "name": "Unevidenced claim check",
+          "kind": "analyzer",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "claim list"
+          ],
+          "produces": [
+            "unevidenced claims"
+          ],
+          "srcNode": "a_unev"
+        },
+        {
+          "id": "st_adjuster",
+          "name": "Missing adjuster check",
+          "kind": "analyzer",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "obligation list"
+          ],
+          "produces": [
+            "orphan obligations"
+          ],
+          "srcNode": "a_adjuster"
+        },
+        {
+          "id": "st_prop",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "unevidenced claims",
+            "orphan obligations"
+          ],
+          "produces": [
+            "payout verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Recommendation",
+          "kind": "human",
+          "intent": "",
+          "prompt": "",
+          "consumes": [
+            "payout verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0",
+          "from": "st_ext",
+          "to": "st_unev",
+          "rel": "needs"
+        },
+        {
+          "id": "le_1",
+          "from": "st_ext",
+          "to": "st_adjuster",
+          "rel": "needs"
+        },
+        {
+          "id": "le_2",
+          "from": "st_unev",
+          "to": "st_prop",
+          "rel": "needs"
+        },
+        {
+          "id": "le_3",
+          "from": "st_adjuster",
+          "to": "st_prop",
+          "rel": "needs"
+        },
+        {
+          "id": "le_4",
+          "from": "st_prop",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    },
+    "schemaVersion": 2,
+    "domainId": "insurance-claims"
+  }
+}

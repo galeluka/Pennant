@@ -1,0 +1,577 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_live_event",
+    "name": "Live event production plan — review template",
+    "domain": "live event production",
+    "domainId": "live-event-production",
+    "reviewDomain": "document-review",
+    "question": "Can this plan be executed in the order it is written, by the people it names, before doors open?",
+    "summary": "A production plan modelled as a document graph, built around the failure that reads as competence in prose: the schedule claims rigging and sound check run in parallel to save four hours, while a DEPENDS_ON edge says sound check cannot start until the rig is up. Both sentences pass a read-through; only the graph puts them side by side, which is why they are wired with CONTRADICTS. The abort criterion is deliberately unevidenced and the contingency chapter has no analyzer pointed at it, so it passes by default. No real venue, artist, supplier or date appears; the load figures are invented and must be replaced before this is used to rig anything.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "The plan as written",
+        "role": "The document, its chapters and the steps that actually run on the day. No claims belong here."
+      },
+      {
+        "id": "l2",
+        "name": "What it commits to",
+        "role": "Assertions that could be false, obligations they create, who is accountable, and the analyzers responsible for checking them."
+      },
+      {
+        "id": "l3",
+        "name": "What would settle it",
+        "role": "Signed instruments and measurements from previous events. A confident estimate is not evidence."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "doc",
+        "layer": "l1",
+        "kind": "document",
+        "label": "Live event production plan",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_runofshow",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Run of show",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_rigging",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Rig and de-rig schedule",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_contingency",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Contingency and abort criteria",
+        "props": {},
+        "note": "No analyzer is pointed here, so it passes by default. Deliberate."
+      },
+      {
+        "id": "ch_contacts",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "On-site contacts",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "proc_rig",
+        "layer": "l1",
+        "kind": "process",
+        "label": "Rig the stage",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "proc_soundcheck",
+        "layer": "l1",
+        "kind": "process",
+        "label": "Sound check",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "proc_doors",
+        "layer": "l1",
+        "kind": "process",
+        "label": "Doors open",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_ready",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The stage is ready before doors open",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_parallel",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "Rigging and sound check run in parallel, saving four hours",
+        "props": {},
+        "note": "The claim the whole schedule is built on. The dependency edge below says it cannot hold."
+      },
+      {
+        "id": "c_load",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "The venue is certified for the rigged load",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_abort",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "There is a stated criterion for abandoning the show",
+        "props": {},
+        "note": "Deliberately unevidenced. Everybody agrees there is one; nothing here says what it is."
+      },
+      {
+        "id": "o_contact",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Name an on-site contact reachable during the show",
+        "props": {},
+        "note": "No owner and no medium. A phone number nobody is holding is not a contact."
+      },
+      {
+        "id": "o_permit",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "File the venue safety certificate before rig day",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_producer",
+        "layer": "l2",
+        "kind": "actor",
+        "label": "Production manager",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_timeline",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Milestone with no duration or an impossible overlap",
+        "props": {},
+        "note": "Reads the schedule as a schedule: what has to finish before what.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "chapter",
+            "obligation",
+            "process"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "schedule steps",
+          "chapter list"
+        ],
+        "produces": [
+          "impossible overlaps"
+        ]
+      },
+      {
+        "id": "a_unev",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Unevidenced claim",
+        "props": {},
+        "note": "A claim with nothing behind it that would settle it.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unevidenced claims"
+        ]
+      },
+      {
+        "id": "a_contact",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Obligation with no named owner or medium",
+        "props": {},
+        "note": "Who, and on what number. Either missing makes it undeliverable.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "obligation",
+            "chapter"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "obligation list",
+          "chapter list"
+        ],
+        "produces": [
+          "unreachable contacts"
+        ]
+      },
+      {
+        "id": "ev_cert",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Venue load certification, signed",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_rigplan",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Rigging plan with load calculations",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_timings",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Timed rehearsal log from the previous event",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "ch_runofshow",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ch_rigging",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "ch_contingency",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ch_contacts",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "proc_rig",
+        "rel": "FLOWS_TO",
+        "to": "proc_soundcheck",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "proc_soundcheck",
+        "rel": "FLOWS_TO",
+        "to": "proc_doors",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "proc_soundcheck",
+        "rel": "DEPENDS_ON",
+        "to": "proc_rig",
+        "note": "Sound check cannot begin until the rig is up. This is the edge that refutes the parallel claim."
+      },
+      {
+        "id": "e_0008",
+        "from": "proc_rig",
+        "rel": "OWNED_BY",
+        "to": "act_producer",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "proc_soundcheck",
+        "rel": "OWNED_BY",
+        "to": "act_producer",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "proc_doors",
+        "rel": "OWNED_BY",
+        "to": "act_producer",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "ch_runofshow",
+        "rel": "ASSERTS",
+        "to": "c_ready",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "ch_rigging",
+        "rel": "ASSERTS",
+        "to": "c_parallel",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "ch_rigging",
+        "rel": "ASSERTS",
+        "to": "c_load",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "ch_contingency",
+        "rel": "ASSERTS",
+        "to": "c_abort",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "c_parallel",
+        "rel": "CONTRADICTS",
+        "to": "c_ready",
+        "note": "If sound check waits for the rig, the four hours do not exist and the stage is not ready."
+      },
+      {
+        "id": "e_0016",
+        "from": "c_ready",
+        "rel": "IMPOSES",
+        "to": "o_contact",
+        "note": ""
+      },
+      {
+        "id": "e_0017",
+        "from": "c_load",
+        "rel": "IMPOSES",
+        "to": "o_permit",
+        "note": ""
+      },
+      {
+        "id": "e_0018",
+        "from": "c_ready",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_timings",
+        "note": ""
+      },
+      {
+        "id": "e_0019",
+        "from": "c_parallel",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_rigplan",
+        "note": ""
+      },
+      {
+        "id": "e_0020",
+        "from": "c_load",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_cert",
+        "note": ""
+      },
+      {
+        "id": "e_0021",
+        "from": "o_permit",
+        "rel": "OWNED_BY",
+        "to": "act_producer",
+        "note": ""
+      },
+      {
+        "id": "e_0022",
+        "from": "a_timeline",
+        "rel": "CHECKS",
+        "to": "proc_soundcheck",
+        "note": ""
+      },
+      {
+        "id": "e_0023",
+        "from": "a_timeline",
+        "rel": "CHECKS",
+        "to": "ch_rigging",
+        "note": ""
+      },
+      {
+        "id": "e_0024",
+        "from": "a_timeline",
+        "rel": "CHECKS",
+        "to": "ch_runofshow",
+        "note": ""
+      },
+      {
+        "id": "e_0025",
+        "from": "a_unev",
+        "rel": "CHECKS",
+        "to": "c_abort",
+        "note": ""
+      },
+      {
+        "id": "e_0026",
+        "from": "a_contact",
+        "rel": "CHECKS",
+        "to": "o_contact",
+        "note": ""
+      },
+      {
+        "id": "e_0027",
+        "from": "a_contact",
+        "rel": "CHECKS",
+        "to": "ch_contacts",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "Decide go or no-go, and name the step that stops it if it is no-go.",
+      "steps": [
+        {
+          "id": "st_ext",
+          "name": "Extract the plan",
+          "kind": "extract",
+          "intent": "Lift chapters, claims, obligations and the schedule out of the document.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "chapter list",
+            "claim list",
+            "obligation list",
+            "schedule steps"
+          ]
+        },
+        {
+          "id": "st_time",
+          "name": "Schedule feasibility check",
+          "kind": "analyzer",
+          "intent": "Overlaps the dependencies forbid, and milestones with no duration.",
+          "prompt": "",
+          "consumes": [
+            "schedule steps",
+            "chapter list"
+          ],
+          "produces": [
+            "impossible overlaps"
+          ],
+          "srcNode": "a_timeline"
+        },
+        {
+          "id": "st_unev",
+          "name": "Unevidenced claim check",
+          "kind": "analyzer",
+          "intent": "Assertions with nothing behind them.",
+          "prompt": "",
+          "consumes": [
+            "claim list"
+          ],
+          "produces": [
+            "unevidenced claims"
+          ],
+          "srcNode": "a_unev"
+        },
+        {
+          "id": "st_contact",
+          "name": "Reachability check",
+          "kind": "analyzer",
+          "intent": "Obligations with nobody named and no medium.",
+          "prompt": "",
+          "consumes": [
+            "obligation list",
+            "chapter list"
+          ],
+          "produces": [
+            "unreachable contacts"
+          ],
+          "srcNode": "a_contact"
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Is the crew this plan needs the crew that is actually available?",
+          "prompt": "",
+          "consumes": [
+            "impossible overlaps",
+            "unevidenced claims",
+            "unreachable contacts"
+          ],
+          "produces": [
+            "go/no-go verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Go or no-go",
+          "kind": "human",
+          "intent": "A named person calls it, holding the verdict and the blocking step.",
+          "prompt": "",
+          "consumes": [
+            "go/no-go verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_ext",
+          "to": "st_time",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_ext",
+          "to": "st_unev",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_ext",
+          "to": "st_contact",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0004",
+          "from": "st_time",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0005",
+          "from": "st_unev",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0006",
+          "from": "st_contact",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0007",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

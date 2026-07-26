@@ -1,0 +1,570 @@
+{
+  "id": "m_document",
+  "name": "Change proposal — document model",
+  "domain": "Document review",
+  "question": "Is this proposal saying something that can be checked, and in what order do we check it?",
+  "summary": "A change proposal modelled as a graph rather than read as prose. Sections make claims; claims create obligations; evidence settles claims. An analyzer is pointed at one claim, not at the document, which is the difference between a finding and an impression. Deliberately shipped with one unevidenced claim — c_benefit, the load-bearing one — because that is the finding the template exists to teach. Contains no real proposal: every label is generic and there is nothing here from any organisation.",
+  "anonymised": true,
+  "layers": [
+    {
+      "id": "l1",
+      "name": "The document",
+      "role": "..."
+    },
+    {
+      "id": "l2",
+      "name": "What it commits",
+      "role": "..."
+    },
+    {
+      "id": "l3",
+      "name": "What settles it",
+      "role": "..."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "doc",
+      "layer": "l1",
+      "kind": "document",
+      "label": "Change proposal",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "s_summary",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Summary",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "s_scope",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Scope",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "s_plan",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Delivery plan",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "s_risk",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Risk and rollback",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "s_cost",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Cost",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "c_benefit",
+      "layer": "l2",
+      "kind": "claim",
+      "label": "The benefit is worth the cost",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "c_dates",
+      "layer": "l2",
+      "kind": "claim",
+      "label": "The dates are achievable",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "c_rollback",
+      "layer": "l2",
+      "kind": "claim",
+      "label": "It can be rolled back",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "c_nodep",
+      "layer": "l2",
+      "kind": "claim",
+      "label": "No other team is blocked",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "o_owner",
+      "layer": "l2",
+      "kind": "obligation",
+      "label": "Named owner accepts the date",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "o_runbook",
+      "layer": "l2",
+      "kind": "obligation",
+      "label": "Rollback runbook exists",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "o_signoff",
+      "layer": "l2",
+      "kind": "obligation",
+      "label": "Blocked teams sign off",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "ev_cap",
+      "layer": "l3",
+      "kind": "evidence",
+      "label": "Team capacity for the quarter",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "ev_prior",
+      "layer": "l3",
+      "kind": "evidence",
+      "label": "Actual duration of the last three like it",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "ev_test",
+      "layer": "l3",
+      "kind": "evidence",
+      "label": "A rollback that was actually executed",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "ev_dep",
+      "layer": "l3",
+      "kind": "evidence",
+      "label": "Dependency map for the affected systems",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "a_unev",
+      "layer": "l2",
+      "kind": "analyzer",
+      "label": "Unevidenced claim",
+      "props": {},
+      "note": "",
+      "appliesTo": {
+        "domains": [
+          "document-review"
+        ],
+        "targetKinds": [
+          "claim"
+        ],
+        "requires": []
+      },
+      "consumes": [
+        "claim list"
+      ],
+      "produces": [
+        "unevidenced claims"
+      ]
+    },
+    {
+      "id": "a_date",
+      "layer": "l2",
+      "kind": "analyzer",
+      "label": "Date without an owner",
+      "props": {},
+      "note": "",
+      "appliesTo": {
+        "domains": [
+          "document-review"
+        ],
+        "targetKinds": [
+          "claim"
+        ],
+        "requires": []
+      },
+      "consumes": [
+        "obligation list"
+      ],
+      "produces": [
+        "orphan dates"
+      ]
+    },
+    {
+      "id": "a_roll",
+      "layer": "l2",
+      "kind": "analyzer",
+      "label": "Untested rollback",
+      "props": {},
+      "note": "",
+      "appliesTo": {
+        "domains": [
+          "document-review"
+        ],
+        "targetKinds": [
+          "claim"
+        ],
+        "requires": []
+      },
+      "consumes": [
+        "claim list",
+        "unnamed dependencies"
+      ],
+      "produces": [
+        "rollback verdict"
+      ]
+    },
+    {
+      "id": "a_scope",
+      "layer": "l2",
+      "kind": "analyzer",
+      "label": "Scope silence",
+      "props": {},
+      "note": "",
+      "appliesTo": {
+        "domains": [
+          "document-review"
+        ],
+        "targetKinds": [
+          "claim"
+        ],
+        "requires": []
+      },
+      "consumes": [
+        "claim list"
+      ],
+      "produces": [
+        "unnamed dependencies"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_0000",
+      "from": "s_summary",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0001",
+      "from": "s_scope",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0002",
+      "from": "s_plan",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0003",
+      "from": "s_risk",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0004",
+      "from": "s_cost",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0005",
+      "from": "s_summary",
+      "to": "c_benefit",
+      "rel": "ASSERTS",
+      "note": ""
+    },
+    {
+      "id": "e_0006",
+      "from": "s_cost",
+      "to": "c_benefit",
+      "rel": "ASSERTS",
+      "note": ""
+    },
+    {
+      "id": "e_0007",
+      "from": "s_plan",
+      "to": "c_dates",
+      "rel": "ASSERTS",
+      "note": ""
+    },
+    {
+      "id": "e_0008",
+      "from": "s_risk",
+      "to": "c_rollback",
+      "rel": "ASSERTS",
+      "note": ""
+    },
+    {
+      "id": "e_0009",
+      "from": "s_scope",
+      "to": "c_nodep",
+      "rel": "ASSERTS",
+      "note": ""
+    },
+    {
+      "id": "e_0010",
+      "from": "c_dates",
+      "to": "o_owner",
+      "rel": "IMPOSES",
+      "note": ""
+    },
+    {
+      "id": "e_0011",
+      "from": "c_rollback",
+      "to": "o_runbook",
+      "rel": "IMPOSES",
+      "note": ""
+    },
+    {
+      "id": "e_0012",
+      "from": "c_nodep",
+      "to": "o_signoff",
+      "rel": "IMPOSES",
+      "note": ""
+    },
+    {
+      "id": "e_0013",
+      "from": "c_dates",
+      "to": "ev_cap",
+      "rel": "EVIDENCED_BY",
+      "note": ""
+    },
+    {
+      "id": "e_0014",
+      "from": "c_dates",
+      "to": "ev_prior",
+      "rel": "EVIDENCED_BY",
+      "note": ""
+    },
+    {
+      "id": "e_0015",
+      "from": "c_rollback",
+      "to": "ev_test",
+      "rel": "EVIDENCED_BY",
+      "note": ""
+    },
+    {
+      "id": "e_0016",
+      "from": "c_nodep",
+      "to": "ev_dep",
+      "rel": "EVIDENCED_BY",
+      "note": ""
+    },
+    {
+      "id": "e_0017",
+      "from": "a_unev",
+      "to": "c_benefit",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0018",
+      "from": "a_date",
+      "to": "c_dates",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0019",
+      "from": "a_roll",
+      "to": "c_rollback",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0020",
+      "from": "a_scope",
+      "to": "c_nodep",
+      "rel": "CHECKS",
+      "note": ""
+    }
+  ],
+  "createdAt": 0,
+  "logic": {
+    "goal": "...",
+    "steps": [
+      {
+        "id": "st_ext",
+        "name": "Extract claims and obligations",
+        "kind": "extract",
+        "intent": "",
+        "prompt": "",
+        "consumes": [],
+        "produces": [
+          "claim list",
+          "obligation list"
+        ]
+      },
+      {
+        "id": "st_scope",
+        "name": "Scope silence",
+        "kind": "analyzer",
+        "intent": "",
+        "prompt": "",
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unnamed dependencies"
+        ],
+        "srcNode": "a_scope"
+      },
+      {
+        "id": "st_unev",
+        "name": "Unevidenced claim",
+        "kind": "analyzer",
+        "intent": "",
+        "prompt": "",
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unevidenced claims"
+        ],
+        "srcNode": "a_unev"
+      },
+      {
+        "id": "st_date",
+        "name": "Date without an owner",
+        "kind": "analyzer",
+        "intent": "",
+        "prompt": "",
+        "consumes": [
+          "obligation list"
+        ],
+        "produces": [
+          "orphan dates"
+        ],
+        "srcNode": "a_date"
+      },
+      {
+        "id": "st_roll",
+        "name": "Untested rollback",
+        "kind": "analyzer",
+        "intent": "",
+        "prompt": "",
+        "consumes": [
+          "claim list",
+          "unnamed dependencies"
+        ],
+        "produces": [
+          "rollback verdict"
+        ],
+        "srcNode": "a_roll"
+      },
+      {
+        "id": "st_prop",
+        "name": "Proportion gate",
+        "kind": "proportions",
+        "intent": "",
+        "prompt": "",
+        "consumes": [
+          "orphan dates",
+          "rollback verdict",
+          "unevidenced claims"
+        ],
+        "produces": [
+          "deliverability verdict"
+        ]
+      },
+      {
+        "id": "st_call",
+        "name": "Recommendation",
+        "kind": "human",
+        "intent": "",
+        "prompt": "",
+        "consumes": [
+          "deliverability verdict"
+        ],
+        "produces": []
+      }
+    ],
+    "edges": [
+      {
+        "id": "le_0",
+        "from": "st_ext",
+        "to": "st_scope",
+        "rel": "needs"
+      },
+      {
+        "id": "le_1",
+        "from": "st_ext",
+        "to": "st_unev",
+        "rel": "needs"
+      },
+      {
+        "id": "le_2",
+        "from": "st_ext",
+        "to": "st_date",
+        "rel": "needs"
+      },
+      {
+        "id": "le_3",
+        "from": "st_scope",
+        "to": "st_roll",
+        "rel": "needs"
+      },
+      {
+        "id": "le_4",
+        "from": "st_ext",
+        "to": "st_roll",
+        "rel": "needs"
+      },
+      {
+        "id": "le_5",
+        "from": "st_date",
+        "to": "st_prop",
+        "rel": "needs"
+      },
+      {
+        "id": "le_6",
+        "from": "st_roll",
+        "to": "st_prop",
+        "rel": "needs"
+      },
+      {
+        "id": "le_7",
+        "from": "st_unev",
+        "to": "st_prop",
+        "rel": "needs"
+      },
+      {
+        "id": "le_8",
+        "from": "st_prop",
+        "to": "st_call",
+        "rel": "needs"
+      },
+      {
+        "id": "le_9",
+        "from": "st_unev",
+        "to": "st_scope",
+        "rel": "after"
+      }
+    ]
+  },
+  "schemaVersion": 2,
+  "domainId": "document-review"
+}

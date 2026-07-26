@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 2,
+  "id": "m_template",
+  "name": "Document template — chapters and analyzers",
+  "domain": "Document review",
+  "domainId": "document-review",
+  "reviewDomain": "document-review",
+  "question": "Does a document of this type contain what it must, and who checks each part of it?",
+  "summary": "A reference template: what a product change document must contain, the rules those chapters have to satisfy, and all ten analyzers wired onto them with CHECKS. Two rules are joined by CONTRADICTS - consumer-only eligibility in one chapter, business tariffs eligible in another - which is the finding the Cross-Examiner exists to raise. Entirely invented: no organisation, product, customer or system appears anywhere in it.",
+  "anonymised": true,
+  "layers": [
+    {
+      "id": "l1",
+      "name": "The document",
+      "role": "What must be present for this to be that kind of document at all."
+    },
+    {
+      "id": "l2",
+      "name": "What it requires",
+      "role": "The rules a document of this type has to satisfy."
+    },
+    {
+      "id": "l3",
+      "name": "Who checks it",
+      "role": "One analyzer per thing that has to be verified."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "doc",
+      "layer": "l1",
+      "kind": "document",
+      "label": "Product change document",
+      "props": {},
+      "note": "A recurring document type. This models the template, not any one instance of it."
+    },
+    {
+      "id": "c1",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Purpose and scope",
+      "props": {},
+      "note": "One page. What is being introduced and for whom.",
+      "seq": 10
+    },
+    {
+      "id": "c2",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Commercial terms",
+      "props": {},
+      "note": "Price, discounts, bundling, and what happens at renewal.",
+      "seq": 20
+    },
+    {
+      "id": "c3",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Eligibility",
+      "props": {},
+      "note": "Who may buy it. The chapter most likely to contradict another one.",
+      "seq": 30
+    },
+    {
+      "id": "c4",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Lifecycle",
+      "props": {},
+      "note": "Order, activate, change, suspend, terminate.",
+      "seq": 40
+    },
+    {
+      "id": "c5",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Channels",
+      "props": {},
+      "note": "Where it is sold, offered and delivered.",
+      "seq": 50
+    },
+    {
+      "id": "c6",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Stakeholders and responsibilities",
+      "props": {},
+      "note": "Who owns what, and who escalates.",
+      "seq": 60
+    },
+    {
+      "id": "c7",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Data flows",
+      "props": {},
+      "note": "What data moves between systems, why, and what happens when it does not.",
+      "seq": 70
+    },
+    {
+      "id": "c8",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Regulatory and personal data",
+      "props": {},
+      "note": "Legal basis, retention, third-party sharing.",
+      "seq": 80
+    },
+    {
+      "id": "c9",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Delivery timeline",
+      "props": {},
+      "note": "Dates, sequence, dependencies.",
+      "seq": 90
+    },
+    {
+      "id": "c10",
+      "layer": "l1",
+      "kind": "chapter",
+      "label": "Migration and activation",
+      "props": {},
+      "note": "Existing customers, and the order things must happen in.",
+      "seq": 100
+    },
+    {
+      "id": "r_elig_consumer",
+      "layer": "l2",
+      "kind": "rule",
+      "label": "Eligibility is limited to consumer tariffs",
+      "props": {},
+      "note": "Stated in Eligibility."
+    },
+    {
+      "id": "r_elig_business",
+      "layer": "l2",
+      "kind": "rule",
+      "label": "Business tariffs are eligible from launch",
+      "props": {},
+      "note": "Stated in Commercial terms. Both cannot be true."
+    },
+    {
+      "id": "r_pricing",
+      "layer": "l2",
+      "kind": "rule",
+      "label": "Discount is applied by the billing system at invoice time",
+      "props": {},
+      "note": ""
+    },
+    {
+      "id": "r_timer",
+      "layer": "l2",
+      "kind": "rule",
+      "label": "Suspension happens quickly after a failed payment",
+      "props": {},
+      "note": "No threshold. This is what the Measurer exists to find."
+    },
+    {
+      "id": "an_v_contradiction",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Cross-Examiner",
+      "props": {
+        "analyzerId": "v_contradiction"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_vague",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Measurer",
+      "props": {
+        "analyzerId": "v_vague"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_timeline",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Scheduler",
+      "props": {
+        "analyzerId": "v_timeline"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_placeholder",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Ghostbuster",
+      "props": {
+        "analyzerId": "v_placeholder"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_stakeholder",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Diplomat",
+      "props": {
+        "analyzerId": "v_stakeholder"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_dependency",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Plumber",
+      "props": {
+        "analyzerId": "v_dependency"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_collision",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Referee",
+      "props": {
+        "analyzerId": "v_collision"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_ownership",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Notary",
+      "props": {
+        "analyzerId": "v_ownership"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_deviation",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Archivist",
+      "props": {
+        "analyzerId": "v_deviation"
+      },
+      "note": ""
+    },
+    {
+      "id": "an_v_regulatory",
+      "layer": "l3",
+      "kind": "analyzer",
+      "label": "The Compliance Officer",
+      "props": {
+        "analyzerId": "v_regulatory"
+      },
+      "note": ""
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_0000",
+      "from": "c1",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0001",
+      "from": "c2",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0002",
+      "from": "c3",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0003",
+      "from": "c4",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0004",
+      "from": "c5",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0005",
+      "from": "c6",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0006",
+      "from": "c7",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0007",
+      "from": "c8",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0008",
+      "from": "c9",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0009",
+      "from": "c10",
+      "to": "doc",
+      "rel": "PART_OF",
+      "note": ""
+    },
+    {
+      "id": "e_0010",
+      "from": "c3",
+      "to": "r_elig_consumer",
+      "rel": "GOVERNS",
+      "note": ""
+    },
+    {
+      "id": "e_0011",
+      "from": "c2",
+      "to": "r_elig_business",
+      "rel": "GOVERNS",
+      "note": ""
+    },
+    {
+      "id": "e_0012",
+      "from": "c2",
+      "to": "r_pricing",
+      "rel": "GOVERNS",
+      "note": ""
+    },
+    {
+      "id": "e_0013",
+      "from": "c4",
+      "to": "r_timer",
+      "rel": "GOVERNS",
+      "note": ""
+    },
+    {
+      "id": "e_0014",
+      "from": "r_elig_consumer",
+      "to": "r_elig_business",
+      "rel": "CONTRADICTS",
+      "note": "Consumer-only in one chapter, business tariffs eligible in another. This is the finding."
+    },
+    {
+      "id": "e_0015",
+      "from": "an_v_contradiction",
+      "to": "r_elig_consumer",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0016",
+      "from": "an_v_vague",
+      "to": "r_timer",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0017",
+      "from": "an_v_timeline",
+      "to": "c9",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0018",
+      "from": "an_v_placeholder",
+      "to": "c7",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0019",
+      "from": "an_v_stakeholder",
+      "to": "c6",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0020",
+      "from": "an_v_dependency",
+      "to": "c7",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0021",
+      "from": "an_v_collision",
+      "to": "r_pricing",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0022",
+      "from": "an_v_ownership",
+      "to": "c3",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0023",
+      "from": "an_v_deviation",
+      "to": "doc",
+      "rel": "CHECKS",
+      "note": ""
+    },
+    {
+      "id": "e_0024",
+      "from": "an_v_regulatory",
+      "to": "c8",
+      "rel": "CHECKS",
+      "note": ""
+    }
+  ],
+  "createdAt": 0
+}

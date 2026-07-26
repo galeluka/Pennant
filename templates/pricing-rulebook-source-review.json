@@ -1,0 +1,391 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_pricing_rulebook",
+    "name": "Pricing rulebook — source review",
+    "domain": "commercial pricing authority",
+    "domainId": "commercial-pricing-authority",
+    "reviewDomain": "source-review",
+    "question": "Who is actually allowed to approve a discount, and at what number does approval become mandatory?",
+    "summary": "A pricing rulebook held as a graph, built around two failures that read as reasonable in prose. One capability carries two OWNED_BY edges and no handoff, which is duplicated authority rather than shared ownership. One rule turns on the word material with no threshold behind it, so nobody can evaluate it without asking. A third rule is deliberately left neither implemented nor checked, which the gap audit reports as nothing enforcing it. Prices, margins and product names are invented; replace every number before this is used for anything.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "Pricing authority",
+        "role": "Who may decide, the standard they decide against, and the capability itself. No rules and no channels belong here."
+      },
+      {
+        "id": "l2",
+        "name": "Rules and defined terms",
+        "role": "The written rules, the terms they turn on, and the measured margin a discount ceiling reads. No owners belong here."
+      },
+      {
+        "id": "l3",
+        "name": "Where a price is published",
+        "role": "Products and the channels that carry them. No governance belongs here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "cap_approve",
+        "layer": "l1",
+        "kind": "capability",
+        "label": "Price change approval",
+        "props": {},
+        "note": "Two teams claim this and the rulebook never says which one hands off to the other."
+      },
+      {
+        "id": "act_commercial",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Commercial pricing manager",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_margin",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Margin control lead",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ctrl_margin",
+        "layer": "l1",
+        "kind": "control",
+        "label": "Minimum margin standard",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_collide",
+        "layer": "l1",
+        "kind": "analyzer",
+        "label": "Two owners for one control",
+        "props": {},
+        "note": "A capability claimed twice with no handoff defined.",
+        "appliesTo": {
+          "domains": [
+            "source-review",
+            "document-review"
+          ],
+          "targetKinds": [
+            "capability",
+            "control",
+            "actor",
+            "rule"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "ownership claims"
+        ],
+        "produces": [
+          "duplicated authority"
+        ]
+      },
+      {
+        "id": "a_vague",
+        "layer": "l1",
+        "kind": "analyzer",
+        "label": "Rule with no testable threshold",
+        "props": {},
+        "note": "A rule whose trigger is a word rather than a number.",
+        "appliesTo": {
+          "domains": [
+            "source-review"
+          ],
+          "targetKinds": [
+            "rule",
+            "ceiling"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "rule statements"
+        ],
+        "produces": [
+          "untestable thresholds"
+        ]
+      },
+      {
+        "id": "rule_discount",
+        "layer": "l2",
+        "kind": "rule",
+        "label": "A material discount requires margin approval",
+        "props": {},
+        "note": "Material is not defined anywhere in the source. This is the finding."
+      },
+      {
+        "id": "rule_promo",
+        "layer": "l2",
+        "kind": "rule",
+        "label": "Promotional pricing expires automatically",
+        "props": {},
+        "note": "Left neither implemented nor checked on purpose. Nothing enforces it."
+      },
+      {
+        "id": "term_material",
+        "layer": "l2",
+        "kind": "term",
+        "label": "Material discount",
+        "props": {},
+        "note": "Named but never given a number, so the rule that uses it cannot be evaluated."
+      },
+      {
+        "id": "var_margin",
+        "layer": "l2",
+        "kind": "variable",
+        "label": "Realised gross margin, last quarter",
+        "props": {},
+        "note": "Measured. Replace with your own figure."
+      },
+      {
+        "id": "ceil_discount",
+        "layer": "l2",
+        "kind": "ceiling",
+        "label": "Deepest discount that holds margin above the standard",
+        "props": {},
+        "note": "Derived from realised margin. Not a target."
+      },
+      {
+        "id": "prod_bundle",
+        "layer": "l3",
+        "kind": "product",
+        "label": "Converged bundle",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "chan_web",
+        "layer": "l3",
+        "kind": "channel",
+        "label": "Web shop",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "chan_retail",
+        "layer": "l3",
+        "kind": "channel",
+        "label": "Retail store",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "cap_approve",
+        "rel": "OWNED_BY",
+        "to": "act_commercial",
+        "note": "First claim."
+      },
+      {
+        "id": "e_0002",
+        "from": "cap_approve",
+        "rel": "OWNED_BY",
+        "to": "act_margin",
+        "note": "Second claim. No handoff is defined between the two."
+      },
+      {
+        "id": "e_0003",
+        "from": "ctrl_margin",
+        "rel": "OWNED_BY",
+        "to": "act_margin",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ctrl_margin",
+        "rel": "GOVERNS",
+        "to": "rule_discount",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "ctrl_margin",
+        "rel": "GOVERNS",
+        "to": "rule_promo",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "rule_promo",
+        "rel": "GOVERNS",
+        "to": "prod_bundle",
+        "note": "The rule reaches the product. Nothing implements it and no analyzer checks it."
+      },
+      {
+        "id": "e_0007",
+        "from": "a_collide",
+        "rel": "CHECKS",
+        "to": "cap_approve",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "a_vague",
+        "rel": "CHECKS",
+        "to": "rule_discount",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "a_vague",
+        "rel": "CHECKS",
+        "to": "ceil_discount",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "term_material",
+        "rel": "USED_IN",
+        "to": "rule_discount",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "ceil_discount",
+        "rel": "DEPENDS_ON",
+        "to": "var_margin",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "ceil_discount",
+        "rel": "GOVERNS",
+        "to": "prod_bundle",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "prod_bundle",
+        "rel": "SOLD_VIA",
+        "to": "chan_web",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "prod_bundle",
+        "rel": "SOLD_VIA",
+        "to": "chan_retail",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "prod_bundle",
+        "rel": "OWNED_BY",
+        "to": "act_commercial",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "Name who may approve a discount, and the number at which approval stops being optional.",
+      "steps": [
+        {
+          "id": "st_read",
+          "name": "Read the rulebook",
+          "kind": "extract",
+          "intent": "Lift every rule and every ownership claim out of the source.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "rule statements",
+            "ownership claims"
+          ]
+        },
+        {
+          "id": "st_collide",
+          "name": "Duplicated authority check",
+          "kind": "analyzer",
+          "intent": "One capability, two claims, no handoff.",
+          "prompt": "",
+          "consumes": [
+            "ownership claims"
+          ],
+          "produces": [
+            "duplicated authority"
+          ],
+          "srcNode": "a_collide"
+        },
+        {
+          "id": "st_vague",
+          "name": "Testable threshold check",
+          "kind": "analyzer",
+          "intent": "A rule turning on a word with no number behind it.",
+          "prompt": "",
+          "consumes": [
+            "rule statements"
+          ],
+          "produces": [
+            "untestable thresholds"
+          ],
+          "srcNode": "a_vague"
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Is the proposed discount inside the ceiling realised margin allows?",
+          "prompt": "",
+          "consumes": [
+            "duplicated authority",
+            "untestable thresholds"
+          ],
+          "produces": [
+            "pricing verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Commercial sign-off",
+          "kind": "human",
+          "intent": "A named person approves, holding the verdict.",
+          "prompt": "",
+          "consumes": [
+            "pricing verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_read",
+          "to": "st_collide",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_read",
+          "to": "st_vague",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_collide",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0004",
+          "from": "st_vague",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0005",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

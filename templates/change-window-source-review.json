@@ -1,0 +1,404 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_change_window",
+    "name": "Change window rules — source review",
+    "domain": "platform change governance",
+    "domainId": "platform-change-governance",
+    "reviewDomain": "source-review",
+    "question": "Can this change be executed inside the stated window without breaking a rule we already hold to be true?",
+    "summary": "A set of standing change-governance rules held as a graph, so a proposed change can be checked against them rather than against somebody's memory of them. Two rules are wired with CONTRADICTS: a month-end freeze and an emergency bypass that does not name a testable definition of emergency. The model deliberately holds no release, no hostname and no ticket reference — it is the rulebook, not the change. What it leaves out is anything about a specific outage; an incident belongs in a postmortem model, not here.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "Standing rules",
+        "role": "Rules, controls and the roles accountable for them. Nothing naming a specific release or change record belongs here."
+      },
+      {
+        "id": "l2",
+        "name": "Definitions and measured limits",
+        "role": "Terms defined once, facts measured about this platform, and the ceilings derived from them. No rules belong here."
+      },
+      {
+        "id": "l3",
+        "name": "What a change touches",
+        "role": "Applications, interfaces and data stores in scope. No governance belongs here."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "rule_freeze",
+        "layer": "l1",
+        "kind": "rule",
+        "label": "No production change during month-end billing",
+        "props": {},
+        "note": "Holds from the last working day of the month until billing confirms close."
+      },
+      {
+        "id": "rule_bypass",
+        "layer": "l1",
+        "kind": "rule",
+        "label": "An emergency change may proceed without board approval",
+        "props": {},
+        "note": "The exception everybody uses. It does not say who declares the emergency."
+      },
+      {
+        "id": "ctrl_board",
+        "layer": "l1",
+        "kind": "control",
+        "label": "Change advisory board mandate",
+        "props": {},
+        "note": "The standing authority both rules derive from."
+      },
+      {
+        "id": "act_chair",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Change advisory board chair",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_oncall",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Platform on-call lead",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_contra",
+        "layer": "l1",
+        "kind": "analyzer",
+        "label": "Conflicting change rules",
+        "props": {},
+        "note": "Two rules giving the platform different instructions for the same night.",
+        "appliesTo": {
+          "domains": [
+            "source-review",
+            "document-review"
+          ],
+          "targetKinds": [
+            "rule"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "rule statements"
+        ],
+        "produces": [
+          "rule conflicts"
+        ]
+      },
+      {
+        "id": "a_thresh",
+        "layer": "l1",
+        "kind": "analyzer",
+        "label": "Rule with no testable threshold",
+        "props": {},
+        "note": "A rule that cannot be evaluated without asking somebody what it meant.",
+        "appliesTo": {
+          "domains": [
+            "source-review"
+          ],
+          "targetKinds": [
+            "rule",
+            "ceiling"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "rule statements",
+          "defined terms"
+        ],
+        "produces": [
+          "untestable thresholds"
+        ]
+      },
+      {
+        "id": "term_prod",
+        "layer": "l2",
+        "kind": "term",
+        "label": "Production",
+        "props": {},
+        "note": "Defined once so the freeze rule and the bypass rule cannot mean different things by it."
+      },
+      {
+        "id": "term_emergency",
+        "layer": "l2",
+        "kind": "term",
+        "label": "Emergency",
+        "props": {},
+        "note": "Used by the bypass rule and never given a threshold. This is the gap the model exists to show."
+      },
+      {
+        "id": "var_peak",
+        "layer": "l2",
+        "kind": "variable",
+        "label": "Peak concurrent sessions, trailing 90 days",
+        "props": {},
+        "note": "Measured, not estimated. Replace with your own figure."
+      },
+      {
+        "id": "ceil_restarts",
+        "layer": "l2",
+        "kind": "ceiling",
+        "label": "Maximum simultaneous rolling restarts",
+        "props": {},
+        "note": "Derived from peak sessions. Not a target — the point past which the platform sheds traffic."
+      },
+      {
+        "id": "app_selfcare",
+        "layer": "l3",
+        "kind": "app",
+        "label": "Customer self-care portal",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "int_billing",
+        "layer": "l3",
+        "kind": "integration",
+        "label": "Billing event stream",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ds_subscriber",
+        "layer": "l3",
+        "kind": "datastore",
+        "label": "Subscriber profile store",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "ctrl_board",
+        "rel": "GOVERNS",
+        "to": "rule_freeze",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ctrl_board",
+        "rel": "GOVERNS",
+        "to": "rule_bypass",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "rule_freeze",
+        "rel": "CONTRADICTS",
+        "to": "rule_bypass",
+        "note": "The freeze admits no exception in its own text. The bypass admits any."
+      },
+      {
+        "id": "e_0004",
+        "from": "rule_freeze",
+        "rel": "OWNED_BY",
+        "to": "act_chair",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "ctrl_board",
+        "rel": "OWNED_BY",
+        "to": "act_chair",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "rule_bypass",
+        "rel": "OWNED_BY",
+        "to": "act_oncall",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "term_prod",
+        "rel": "USED_IN",
+        "to": "rule_freeze",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "term_emergency",
+        "rel": "USED_IN",
+        "to": "rule_bypass",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "ceil_restarts",
+        "rel": "DEPENDS_ON",
+        "to": "var_peak",
+        "note": "The expression cannot be evaluated without the measurement."
+      },
+      {
+        "id": "e_0010",
+        "from": "a_contra",
+        "rel": "CHECKS",
+        "to": "rule_freeze",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "a_contra",
+        "rel": "CHECKS",
+        "to": "rule_bypass",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "a_thresh",
+        "rel": "CHECKS",
+        "to": "ceil_restarts",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "ceil_restarts",
+        "rel": "GOVERNS",
+        "to": "app_selfcare",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "app_selfcare",
+        "rel": "READS_FROM",
+        "to": "ds_subscriber",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "app_selfcare",
+        "rel": "WRITES_TO",
+        "to": "int_billing",
+        "note": ""
+      },
+      {
+        "id": "e_0016",
+        "from": "app_selfcare",
+        "rel": "OWNED_BY",
+        "to": "act_oncall",
+        "note": ""
+      },
+      {
+        "id": "e_0017",
+        "from": "int_billing",
+        "rel": "OWNED_BY",
+        "to": "act_oncall",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "Decide whether a proposed change may run in the requested window, and name the rule that stops it if it may not.",
+      "steps": [
+        {
+          "id": "st_read",
+          "name": "Read the rulebook",
+          "kind": "extract",
+          "intent": "Lift every rule statement and defined term out of the source.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "rule statements",
+            "defined terms"
+          ]
+        },
+        {
+          "id": "st_contra",
+          "name": "Conflicting rules check",
+          "kind": "analyzer",
+          "intent": "Two rules that cannot both be obeyed on the same night.",
+          "prompt": "",
+          "consumes": [
+            "rule statements"
+          ],
+          "produces": [
+            "rule conflicts"
+          ],
+          "srcNode": "a_contra"
+        },
+        {
+          "id": "st_thresh",
+          "name": "Testable threshold check",
+          "kind": "analyzer",
+          "intent": "A rule whose trigger nobody can evaluate.",
+          "prompt": "",
+          "consumes": [
+            "rule statements",
+            "defined terms"
+          ],
+          "produces": [
+            "untestable thresholds"
+          ],
+          "srcNode": "a_thresh"
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Is the restart plan inside the ceiling the measurements allow?",
+          "prompt": "",
+          "consumes": [
+            "rule conflicts",
+            "untestable thresholds"
+          ],
+          "produces": [
+            "change window verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Board decision",
+          "kind": "human",
+          "intent": "A person approves or refuses, holding the verdict and the named rule.",
+          "prompt": "",
+          "consumes": [
+            "change window verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_read",
+          "to": "st_contra",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_read",
+          "to": "st_thresh",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_contra",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0004",
+          "from": "st_thresh",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0005",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

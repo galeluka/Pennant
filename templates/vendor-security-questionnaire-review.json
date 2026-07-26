@@ -1,0 +1,499 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_vendor_questionnaire",
+    "name": "Vendor security questionnaire — review template",
+    "domain": "third party security assurance",
+    "domainId": "third-party-security-assurance",
+    "reviewDomain": "document-review",
+    "question": "Which of this vendor's answers are evidenced by somebody other than the vendor?",
+    "summary": "A completed third-party security questionnaire modelled as a document graph. Its point is the distinction prose flattens: one claim is evidenced by an independent audit report, another only by the vendor's own completed questionnaire, and a third by nothing at all. All three read identically in the response document; only the graph separates them. One chapter is left unchecked so the gap audit reports it passing by default. No real vendor, product, certificate or audit reference appears here.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "The response as submitted",
+        "role": "The document and its chapters. No claims belong here."
+      },
+      {
+        "id": "l2",
+        "name": "What the vendor asserts and owes",
+        "role": "Claims that could be false, obligations they create, and the analyzers responsible for them. No evidence belongs here."
+      },
+      {
+        "id": "l3",
+        "name": "What would settle it",
+        "role": "Independent reports and signed instruments. The vendor's own word is recorded here too, marked as what it is."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "doc",
+        "layer": "l1",
+        "kind": "document",
+        "label": "Third-party security questionnaire response",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_access",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Access control",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_encrypt",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Encryption",
+        "props": {},
+        "note": "No analyzer is pointed here, so it passes by default. Deliberate."
+      },
+      {
+        "id": "ch_subproc",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Sub-processors",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ch_ir",
+        "layer": "l1",
+        "kind": "chapter",
+        "label": "Incident response",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_mfa",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "Administrative access requires multi-factor authentication",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "c_rest",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "Customer data is encrypted at rest",
+        "props": {},
+        "note": "Evidenced only by the vendor's own questionnaire. That is an assertion repeated, not evidence."
+      },
+      {
+        "id": "c_notify",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "A breach is notified within twenty-four hours",
+        "props": {},
+        "note": "Deliberately unevidenced. Nothing here would settle it."
+      },
+      {
+        "id": "c_nosub",
+        "layer": "l2",
+        "kind": "claim",
+        "label": "No sub-processor handles customer data",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_pentest",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Provide an annual penetration test report",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "o_subnotice",
+        "layer": "l2",
+        "kind": "obligation",
+        "label": "Notify before adding a sub-processor",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_assurance",
+        "layer": "l2",
+        "kind": "actor",
+        "label": "Security assurance lead",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "a_unev",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Claim with no evidence at all",
+        "props": {},
+        "note": "An answer nothing would settle.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "claim list"
+        ],
+        "produces": [
+          "unevidenced claims"
+        ]
+      },
+      {
+        "id": "a_self",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Claim evidenced only by the vendor",
+        "props": {},
+        "note": "An answer whose only support is the document making it.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "claim"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "claim list",
+          "evidence list"
+        ],
+        "produces": [
+          "self-attested claims"
+        ]
+      },
+      {
+        "id": "a_placeholder",
+        "layer": "l2",
+        "kind": "analyzer",
+        "label": "Chapter promised and never written",
+        "props": {},
+        "note": "A section the response commits to and does not contain.",
+        "appliesTo": {
+          "domains": [
+            "document-review"
+          ],
+          "targetKinds": [
+            "document",
+            "chapter"
+          ],
+          "requires": []
+        },
+        "consumes": [
+          "chapter list"
+        ],
+        "produces": [
+          "missing content"
+        ]
+      },
+      {
+        "id": "ev_audit",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Independent third-party audit report",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_self",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "The vendor's own completed questionnaire",
+        "props": {},
+        "note": "Recorded as evidence so the graph can show that it is the only thing behind a claim."
+      },
+      {
+        "id": "ev_dpa",
+        "layer": "l3",
+        "kind": "evidence",
+        "label": "Signed processing agreement, sub-processor annex",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "ch_access",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ch_encrypt",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "ch_subproc",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "ch_ir",
+        "rel": "PART_OF",
+        "to": "doc",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "ch_access",
+        "rel": "ASSERTS",
+        "to": "c_mfa",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "ch_encrypt",
+        "rel": "ASSERTS",
+        "to": "c_rest",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "ch_ir",
+        "rel": "ASSERTS",
+        "to": "c_notify",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "ch_subproc",
+        "rel": "ASSERTS",
+        "to": "c_nosub",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "c_mfa",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_audit",
+        "note": "Independent."
+      },
+      {
+        "id": "e_0010",
+        "from": "c_rest",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_self",
+        "note": "The vendor's own word, and nothing else."
+      },
+      {
+        "id": "e_0011",
+        "from": "c_nosub",
+        "rel": "EVIDENCED_BY",
+        "to": "ev_dpa",
+        "note": ""
+      },
+      {
+        "id": "e_0012",
+        "from": "c_mfa",
+        "rel": "IMPOSES",
+        "to": "o_pentest",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "c_nosub",
+        "rel": "IMPOSES",
+        "to": "o_subnotice",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "o_pentest",
+        "rel": "OWNED_BY",
+        "to": "act_assurance",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "o_subnotice",
+        "rel": "OWNED_BY",
+        "to": "act_assurance",
+        "note": ""
+      },
+      {
+        "id": "e_0016",
+        "from": "a_unev",
+        "rel": "CHECKS",
+        "to": "c_notify",
+        "note": ""
+      },
+      {
+        "id": "e_0017",
+        "from": "a_self",
+        "rel": "CHECKS",
+        "to": "c_rest",
+        "note": ""
+      },
+      {
+        "id": "e_0018",
+        "from": "a_placeholder",
+        "rel": "CHECKS",
+        "to": "ch_access",
+        "note": ""
+      },
+      {
+        "id": "e_0019",
+        "from": "a_placeholder",
+        "rel": "CHECKS",
+        "to": "ch_subproc",
+        "note": ""
+      },
+      {
+        "id": "e_0020",
+        "from": "a_placeholder",
+        "rel": "CHECKS",
+        "to": "ch_ir",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "Separate the answers an independent party would confirm from the ones only the vendor asserts.",
+      "steps": [
+        {
+          "id": "st_ext",
+          "name": "Extract chapters, claims and evidence",
+          "kind": "extract",
+          "intent": "Lift the structure of the response before judging any answer.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "chapter list",
+            "claim list",
+            "evidence list"
+          ]
+        },
+        {
+          "id": "st_ph",
+          "name": "Missing content check",
+          "kind": "analyzer",
+          "intent": "Sections promised and not written.",
+          "prompt": "",
+          "consumes": [
+            "chapter list"
+          ],
+          "produces": [
+            "missing content"
+          ],
+          "srcNode": "a_placeholder"
+        },
+        {
+          "id": "st_unev",
+          "name": "No evidence check",
+          "kind": "analyzer",
+          "intent": "Answers with nothing behind them.",
+          "prompt": "",
+          "consumes": [
+            "claim list"
+          ],
+          "produces": [
+            "unevidenced claims"
+          ],
+          "srcNode": "a_unev"
+        },
+        {
+          "id": "st_self",
+          "name": "Self-attestation check",
+          "kind": "analyzer",
+          "intent": "Answers supported only by the document making them.",
+          "prompt": "",
+          "consumes": [
+            "claim list",
+            "evidence list"
+          ],
+          "produces": [
+            "self-attested claims"
+          ],
+          "srcNode": "a_self"
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Is the assurance effort this vendor needs inside what the team can absorb?",
+          "prompt": "",
+          "consumes": [
+            "missing content",
+            "unevidenced claims",
+            "self-attested claims"
+          ],
+          "produces": [
+            "assurance verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Assurance decision",
+          "kind": "human",
+          "intent": "A named person accepts the vendor, accepts with conditions, or refuses.",
+          "prompt": "",
+          "consumes": [
+            "assurance verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_ext",
+          "to": "st_ph",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_ext",
+          "to": "st_unev",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_ext",
+          "to": "st_self",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0004",
+          "from": "st_ph",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0005",
+          "from": "st_unev",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0006",
+          "from": "st_self",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0007",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}

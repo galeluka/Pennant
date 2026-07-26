@@ -1,0 +1,313 @@
+{
+  "kind": "doccritique.knowledge-model",
+  "schemaVersion": "1.1",
+  "model": {
+    "schemaVersion": 2,
+    "id": "m_capture_pipeline",
+    "name": "Change data capture pipeline — system model",
+    "domain": "data distribution platform",
+    "domainId": "data-distribution-platform",
+    "reviewDomain": "system",
+    "question": "What runs in this pipeline, what does it write to, and who is named for each part of it?",
+    "summary": "A change data capture pipeline as a system model: a source store, a capture connector, a streaming platform, a sink and a backup process, with the ownership actually declared. It is here for two reasons. First, it is the shape most platform teams start with. Second, it reads as a system model, so no analyzer applies to it — the Analyzers page shows all ten greyed with a reason, which is the correct answer and not a bug. One component is deliberately left with no owner. No hostname, cluster name, vendor or topic name appears; every label is generic on purpose.",
+    "anonymised": true,
+    "createdAt": "2026-07-25T00:00:00.000Z",
+    "layers": [
+      {
+        "id": "l1",
+        "name": "Capability and ownership",
+        "role": "What the pipeline is for and who is accountable. Nothing deployed belongs here."
+      },
+      {
+        "id": "l2",
+        "name": "What runs",
+        "role": "Connectors, the streaming platform, the source store and the scheduled jobs. No ownership statements belong here."
+      },
+      {
+        "id": "l3",
+        "name": "Where it lands",
+        "role": "Downstream stores and the third parties behind them."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "cap_distribute",
+        "layer": "l1",
+        "kind": "capability",
+        "label": "Near-real-time data distribution",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ctrl_rpo",
+        "layer": "l1",
+        "kind": "control",
+        "label": "Recovery point objective standard",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_platform",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Platform engineering team",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "act_data",
+        "layer": "l1",
+        "kind": "actor",
+        "label": "Data platform team",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ds_source",
+        "layer": "l2",
+        "kind": "datastore",
+        "label": "Operational relational cluster",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "app_capture",
+        "layer": "l2",
+        "kind": "app",
+        "label": "Change data capture connector",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "int_bus",
+        "layer": "l2",
+        "kind": "integration",
+        "label": "Event streaming platform",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "app_sink",
+        "layer": "l2",
+        "kind": "app",
+        "label": "Downstream sink connector",
+        "props": {},
+        "note": "Deliberately left with no OWNED_BY edge. In practice this is the component a vendor wrote and nobody internally adopted."
+      },
+      {
+        "id": "proc_backup",
+        "layer": "l2",
+        "kind": "process",
+        "label": "Scheduled base backup",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ev_failover",
+        "layer": "l2",
+        "kind": "event",
+        "label": "Source primary failover",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "ds_lake",
+        "layer": "l3",
+        "kind": "datastore",
+        "label": "Analytics lake store",
+        "props": {},
+        "note": ""
+      },
+      {
+        "id": "prov_object",
+        "layer": "l3",
+        "kind": "provider",
+        "label": "Object storage service",
+        "props": {},
+        "note": ""
+      }
+    ],
+    "edges": [
+      {
+        "id": "e_0001",
+        "from": "cap_distribute",
+        "rel": "OWNED_BY",
+        "to": "act_data",
+        "note": ""
+      },
+      {
+        "id": "e_0002",
+        "from": "ctrl_rpo",
+        "rel": "OWNED_BY",
+        "to": "act_platform",
+        "note": ""
+      },
+      {
+        "id": "e_0003",
+        "from": "ctrl_rpo",
+        "rel": "GOVERNS",
+        "to": "proc_backup",
+        "note": ""
+      },
+      {
+        "id": "e_0004",
+        "from": "app_capture",
+        "rel": "IMPLEMENTS",
+        "to": "cap_distribute",
+        "note": ""
+      },
+      {
+        "id": "e_0005",
+        "from": "app_capture",
+        "rel": "READS_FROM",
+        "to": "ds_source",
+        "note": ""
+      },
+      {
+        "id": "e_0006",
+        "from": "app_capture",
+        "rel": "WRITES_TO",
+        "to": "int_bus",
+        "note": ""
+      },
+      {
+        "id": "e_0007",
+        "from": "app_sink",
+        "rel": "LISTENS_TO",
+        "to": "int_bus",
+        "note": ""
+      },
+      {
+        "id": "e_0008",
+        "from": "app_sink",
+        "rel": "WRITES_TO",
+        "to": "ds_lake",
+        "note": ""
+      },
+      {
+        "id": "e_0009",
+        "from": "proc_backup",
+        "rel": "READS_FROM",
+        "to": "ds_source",
+        "note": ""
+      },
+      {
+        "id": "e_0010",
+        "from": "proc_backup",
+        "rel": "WRITES_TO",
+        "to": "prov_object",
+        "note": ""
+      },
+      {
+        "id": "e_0011",
+        "from": "ev_failover",
+        "rel": "TRIGGERS",
+        "to": "app_capture",
+        "note": "A failover moves the write position. The connector has to be told."
+      },
+      {
+        "id": "e_0012",
+        "from": "ds_source",
+        "rel": "OWNED_BY",
+        "to": "act_platform",
+        "note": ""
+      },
+      {
+        "id": "e_0013",
+        "from": "app_capture",
+        "rel": "OWNED_BY",
+        "to": "act_data",
+        "note": ""
+      },
+      {
+        "id": "e_0014",
+        "from": "proc_backup",
+        "rel": "OWNED_BY",
+        "to": "act_platform",
+        "note": ""
+      },
+      {
+        "id": "e_0015",
+        "from": "ds_lake",
+        "rel": "OWNED_BY",
+        "to": "act_data",
+        "note": ""
+      }
+    ],
+    "logic": {
+      "goal": "List every component that runs, and name the ones with nobody accountable for them.",
+      "steps": [
+        {
+          "id": "st_map",
+          "name": "Map what runs",
+          "kind": "extract",
+          "intent": "Enumerate the deployed components and the ownership actually declared.",
+          "prompt": "",
+          "consumes": [],
+          "produces": [
+            "running components",
+            "declared owners"
+          ]
+        },
+        {
+          "id": "st_gap",
+          "name": "Match components to owners",
+          "kind": "transform",
+          "intent": "Set difference, not judgement. No analyzer applies to a system model.",
+          "prompt": "",
+          "consumes": [
+            "running components",
+            "declared owners"
+          ],
+          "produces": [
+            "components with no owner"
+          ]
+        },
+        {
+          "id": "st_gate",
+          "name": "Proportion gate",
+          "kind": "proportions",
+          "intent": "Can the team named actually carry the components attributed to it?",
+          "prompt": "",
+          "consumes": [
+            "components with no owner"
+          ],
+          "produces": [
+            "operability verdict"
+          ]
+        },
+        {
+          "id": "st_call",
+          "name": "Platform review",
+          "kind": "human",
+          "intent": "A named person assigns the orphans or accepts the risk.",
+          "prompt": "",
+          "consumes": [
+            "operability verdict"
+          ],
+          "produces": []
+        }
+      ],
+      "edges": [
+        {
+          "id": "le_0001",
+          "from": "st_map",
+          "to": "st_gap",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0002",
+          "from": "st_gap",
+          "to": "st_gate",
+          "rel": "needs"
+        },
+        {
+          "id": "le_0003",
+          "from": "st_gate",
+          "to": "st_call",
+          "rel": "needs"
+        }
+      ]
+    }
+  }
+}
